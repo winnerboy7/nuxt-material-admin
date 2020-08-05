@@ -7,18 +7,36 @@
             <v-card class="elevation-1 pa-3">
               <v-card-text>
                 <div class="layout column align-center">
-                  <img src="../static/m.png" alt="Vue Material Admin" width="120" height="120">
-                  <h1 class="flex my-4 primary--text">Material Admin Template</h1>
+                  <img src="../static/images/logo-dark.png" alt="Vue Material Admin"  height="120">
+                  <h1 class="flex my-4 primary--text">SITE - GATEWAY</h1>
                 </div>
-                <v-form>
-                  <v-text-field append-icon="person" name="login" label="Login" type="text"
-                                v-model="model.username"></v-text-field>
-                  <v-text-field append-icon="lock" name="password" label="Password" id="password" type="password"
-                                v-model="model.password"></v-text-field>
+                <v-form v-model="valid">
+                  <v-text-field
+                    append-icon="person"
+                    label="Login"
+                    name="username"
+                    v-validate="'required'"
+                    data-vv-name="username"
+                    :error-messages="errors.collect('username')"
+                    v-model="form.username"
+                    required
+                  ></v-text-field>
+                  <v-text-field 
+                    append-icon="lock"
+                    label="Password"
+                    id="password" 
+                    name="password" 
+                    v-validate="'required'"
+                    data-vv-name="password"
+                    :error-messages="errors.collect('password')"                    
+                    type="password"
+                    v-model="form.password"
+                    required
+                  ></v-text-field>
                 </v-form>
               </v-card-text>
               <v-card-actions>
-                <v-btn icon>
+                <!-- <v-btn icon>
                   <v-icon color="blue">fa fa-facebook-square fa-lg</v-icon>
                 </v-btn>
                 <v-btn icon>
@@ -27,8 +45,8 @@
                 <v-btn icon>
                   <v-icon color="light-blue">fa fa-twitter fa-lg</v-icon>
                 </v-btn>
-                <v-spacer></v-spacer>
-                <v-btn block color="primary" @click="login" :loading="loading">Login</v-btn>
+                <v-spacer></v-spacer> -->
+                <v-btn block color="primary" @click="submit" :loading="loading">Login</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -39,23 +57,54 @@
 </template>
 
 <script>
+  import { mapState, mapActions } from "vuex";
+
   export default {
     layout: 'default',
+    $_veeValidate: {
+      validator: 'new'
+    },
     data: () => ({
       loading: false,
-      model: {
-        username: 'admin@example.com',
-        password: 'password'
-      }
+      form: {
+        username: '',
+        password: ''
+      },
+      valid: true,
     }),
 
+    computed: {
+      ...mapState("account", ["status"])
+    },
+
+    mounted () {
+      this.$validator.localize('th', this.dictionary);
+    },
+
     methods: {
-      login() {
+      ...mapActions("account", ["login", "logout"]),
+      ...mapActions("alert", ["success", "error", "clear"]),
+
+      submit () {
+        this.$validator.validateAll();
         this.loading = true;
-        setTimeout(() => {
-          this.$router.push('/dashboard');
-        }, 1000);
+        const { username, password } = this.form;
+        if (username && password) {
+          this.login({ username, password })
+        }
+        this.loading = false;
+        // setTimeout(() => {
+        //   this.$router.push('/dashboard');
+        // }, 1000);
+      },
+      clear () {
+        this.formModel = {};
+        this.$validator.reset();
       }
+    },
+
+    beforeDestroy (){
+      this.clear();
     }
 
   };

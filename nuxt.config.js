@@ -9,16 +9,14 @@ module.exports = {
    ** Headers of the page
    */
   head: {
-    title: "Vue Material Admin Template",
+    title: "HRMS : Human Resource Management System." || process.env.npm_package_name,
     meta: [
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       {
         hid: "description",
         name: "description",
-        content:
-          "Vue Material Admin Template is a \n" +
-          "    Google Material Design inspired admin dashboard template built with Vue and Vuetify."
+        content: process.env.npm_package_description || ""
       }
     ],
     link: [
@@ -53,12 +51,35 @@ module.exports = {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ["@/plugins/vuetify", "@/plugins/vee-validate"],
+  plugins: [
+    "@/plugins/vuetify", 
+    "@/plugins/vee-validate",
+    "~/plugins/axios",
+  ],
+  proxy: {
+    //-- ตั้งค่า map proxy url api server
+    "/api": "http://127.0.0.1:9000",
+    ws: true
+  },
 
   /*
    ** Nuxt.js modules
    */
-  modules: [],
+  modules: [
+    // Doc: https://axios.nuxtjs.org/usage
+    "@nuxtjs/axios",
+    // Doc: https://github.com/nuxt-community/proxy-module
+    "@nuxtjs/proxy",
+  ],
+
+  /*
+   ** Axios module configuration
+   ** See https://axios.nuxtjs.org/options
+   */
+  axios: {
+    // baseURL: 'http://127.0.0.1:9000/api'
+    proxy: true // Can be also an object with default options
+  },
 
   /*
    ** Build configuration
