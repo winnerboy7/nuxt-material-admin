@@ -165,7 +165,7 @@ function insert(teacher) {
 function update(teacher) {
   return new Promise((resolve, reject) => {
     axios
-      .put(`/api/teacher/${teacher.personId}`, teacher, {
+      .put(`/api/teachers/${teacher.personId}`, teacher, {
         headers: authHeader()
       })
       .then(response => {
@@ -200,12 +200,12 @@ function handleError(error) {
 
   let errMessage = error;
   if (error.response) {
-    errMessage = error.response.data.errmsg;
+    errMessage = error.response.data.message || error.response.data.errmsg || error.response.statusText
 
     if (error.response.status === 401) {
       // logout();
       // this.$router.push("/login");
-      location.href = "/#/login";
+      location.href = "/login";
     }
   }
 

@@ -31,16 +31,28 @@
             Sidebar Option
           </v-subheader>
           <v-divider></v-divider>
-          <div class="my-3">
+          <!-- <div class="my-3">
             <v-btn-toggle v-model="sideBarOption">
-              <v-btn flat value="dark">
+              <v-btn text value="dark">
                 Dark
               </v-btn>
-              <v-btn flat value="light">
+              <v-btn text value="light">
                 Light
               </v-btn>
             </v-btn-toggle>   
-          </div>
+          </div> -->
+          <v-toolbar
+            flat
+            height="72"
+          >
+            <v-switch
+              v-model="$vuetify.theme.dark"
+              hint="This toggles the global state of the Vuetify theme"
+              inset
+              label="Vuetify Theme Dark"
+              persistent-hint
+            ></v-switch>
+          </v-toolbar>
         </div>        
       </v-flex>
     </v-layout>
@@ -147,14 +159,18 @@ export default {
   watch: {
     themeColor: {
       handler (val) {
-        this.$vuetify.theme.primary = this.colors[val].base;
+        // this.$vuetify.theme.primary = this.colors[val].base;
+        this.$vuetify.theme.themes.light.primary = this.colors[val].base;
+        this.$vuetify.theme.themes.dark.primary = this.colors[val].base;
         
       },
       immediate: true
     },
     sideBarOption: {
       handler (val) {
-        this.$vuetify.dark = (val === 'dark');
+        this.$vuetify.theme.dark = (val === 'dark');
+        // this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+        // console.log(this.$vuetify.theme.dark);
       },
       immediate: true      
     }

@@ -1,83 +1,96 @@
-import { authen } from "@/_services/authen";
+import { AuthenService } from '@/controllers'
+// import { router } from '@/router'
 
-const user = JSON.parse(localStorage.getItem("user"));
+const user = JSON.parse(localStorage.getItem('user'))
 const state = user
   ? { status: { loggedIn: true }, user }
-  : { status: {}, user: null };
+  : { status: {}, user: null }
 
 const mutations = {
   LOGIN_REQUEST(state, user) {
-    state.status = { loggingIn: true };
-    state.user = user;
+    state.status = { loggingIn: true }
+    state.user = user
   },
   LOGIN_SUCCESS(state, user) {
-    state.status = { loggedIn: true };
-    state.user = user;
+    state.status = { loggedIn: true }
+    state.user = user
   },
   LOGIN_FAILURE(state) {
-    state.status = {};
-    state.user = null;
+    state.status = {}
+    state.user = null
   },
   LOGOUT(state) {
-    state.status = {};
-    state.user = null;
+    state.status = {}
+    state.user = null
   },
-  REGISTER_REQUEST(state, user) {
-    state.status = { registering: true };
-  },
-  REGISTER_SUCCESS(state, user) {
-    state.status = {};
-  },
-  REGISTER_FAILURE(state, error) {
-    state.status = {};
-  }
-};
+}
 
 const actions = {
   login({ dispatch, commit }, { username, password }) {
-    commit("LOGIN_REQUEST", { username });
-
-    authen.login(username, password).then(
-      user => {
-        commit("LOGIN_SUCCESS", user);
-        dispatch("alert/success", "ยินดีต้อนรับ : " + username, { root: true });
-        this.$router.push("/");
+    commit('LOGIN_REQUEST', { username })
+   
+    this.$auth.loginWith('local', {
+      data: {
+        username: username,
+        password: password,
       },
-      error => {
-        commit("LOGIN_FAILURE", error);
-        dispatch("alert/error", error, { root: true });
+    }).then(
+      (user) => {
+        // console.log(user.data)
+        if (user.data.token) {
+          localStorage.setItem('user', JSON.stringify(user.data))
+          commit('LOGIN_SUCCESS', user.data)
+          dispatch('alert/success', 'ยินดีต้อนรับ : ' + username, {
+            root: true
+          })
+        } else {
+          commit('LOGIN_FAILURE', 'เกิดข้อผิดพลาด !')
+          dispatch('alert/error', 'เกิดข้อผิดพลาด !', {
+            root: true
+          })
+        }
+      },
+      (error) => {
+        // console.log(error.response.data)
+        commit('LOGIN_FAILURE', error.response.data.message)
+        dispatch('alert/error', error.response.data.message, { root: true })
       }
-    );
+    )
+  },
+
+  auth({ dispatch, commit }, { username, password }) {
+    commit('LOGIN_REQUEST', { username })
+    AuthenService.login(username, password).then(
+      (user) => {
+        if (user.data.token) {
+          localStorage.setItem('user', JSON.stringify(user.data))
+          commit('LOGIN_SUCCESS', user.data)
+          dispatch('alert/success', 'ยินดีต้อนรับ : ' + username, {
+            root: true
+          })
+        } else {
+          commit('LOGIN_FAILURE', 'เกิดข้อผิดพลาด !')
+          dispatch('alert/error', 'เกิดข้อผิดพลาด !', {
+            root: true
+          })
+        }
+      },
+      (error) => {
+        commit('LOGIN_FAILURE', error)
+        dispatch('alert/error', error, { root: true })
+      }
+    )
   },
 
   logout({ commit }) {
-    authen.logout();
-    commit("LOGOUT");
+    AuthenService.logout()
+    commit('LOGOUT')
   },
-  
-  register({ dispatch, commit }, user) {
-    commit("REGISTER_REQUEST", user);
-
-    authen.register(user).then(
-      user => {
-        commit("REGISTER_SUCCESS", user);
-        this.$router.push("/#/login");
-        setTimeout(() => {
-          // display success message after route change completes
-          dispatch("alert/success", "Registration successful", { root: true });
-        });
-      },
-      error => {
-        commit("REGISTER_FAILURE", error);
-        dispatch("alert/error", error, { root: true });
-      }
-    );
-  }
-};
+}
 
 export const account = {
   namespaced: true,
   state,
   actions,
   mutations
-};
+}

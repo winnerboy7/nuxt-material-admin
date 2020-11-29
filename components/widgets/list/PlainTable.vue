@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-toolbar card dense color="transparent">
+    <v-toolbar dense color="transparent">
       <v-toolbar-title><h4>Project</h4></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn icon>
@@ -13,7 +13,7 @@
         <v-data-table
           :headers="headers"
           :items="projects"
-          hide-actions
+          ide-default-footer
           class="elevation-0"
         >
           <template slot="items" slot-scope="props">

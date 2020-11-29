@@ -162,12 +162,12 @@ function handleError(error) {
 
   let errMessage = error;
   if (error.response) {
-    errMessage = error.response.data.errmsg;
+    errMessage = error.response.data.message || error.response.data.errmsg || error.response.statusText
 
     if (error.response.status === 401) {
       // logout();
       // this.$router.push("/login");
-      location.href = "/#/login";
+      location.href = "/login";
     }
   }
 

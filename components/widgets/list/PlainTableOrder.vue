@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-toolbar card dense color="transparent">
+    <v-toolbar dense color="transparent">
       <v-toolbar-title><h4>Order</h4></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn icon>
@@ -13,7 +13,7 @@
         <v-data-table
           :headers="headers"
           :items="items"
-          hide-actions
+          hide-default-footer
           class="elevation-0 table-striped"
         >
           <template slot="items" slot-scope="props">

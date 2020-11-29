@@ -12,7 +12,10 @@ export const standardcodeService = {
   getPositionCode,
   getTeachAcademicLevelCode,
   getAcademicStandingCode,
-  getTeachSubjectCode
+  getTeachSubjectCode,
+  getSchoolType,
+  getSchoolSpecial,
+  getSchoolPosition,
 };
 function getPrefix() {
   return new Promise((resolve, reject) => {
@@ -191,17 +194,62 @@ function getTeachSubjectCode() {
   });
 }
 
+function getSchoolType() {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`/api/standardcode/schoolType/`, {
+        headers : authHeader(),
+      })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(error => {
+        reject(handleError(error));
+      });
+  });
+}
+
+function getSchoolSpecial() {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`/api/standardcode/schoolSpecial/`, {
+        headers : authHeader(),
+      })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(error => {
+        reject(handleError(error));
+      });
+  });
+}
+
+function getSchoolPosition() {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`/api/standardcode/schoolPosition/`, {
+        headers : authHeader(),
+      })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(error => {
+        reject(handleError(error));
+      });
+  });
+}
+
 function handleError(error) {
   // console.log({...error});
 
   let errMessage = error;
   if (error.response) {
-    errMessage = error.response.data.errmsg;
+    errMessage = error.response.data.message || error.response.data.errmsg || error.response.statusText
 
     if (error.response.status === 401) {
       // logout();
       // this.$router.push("/login");
-      location.href = "/#/login";
+      location.href = "/login";
     }
   }
 

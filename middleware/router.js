@@ -1,10 +1,10 @@
-import { Role } from "@/_services/Role";
+import { Role } from "@/controllers/role";
 
 export default function({ store, redirect ,route }) {
   console.log('#MIDDLEWARE#');
 
   if (store.state.account.status.loggedIn) {
-    console.log('*IS LOGIN*');
+    // console.log('*IS LOGIN*');
     console.log(`IS : ${store.state.account.user.role}`);
     console.log(route.fullPath)
 

@@ -8,7 +8,8 @@
 
 <script>
   export default {
-    layout: "dashboard",
+    layout: "app",
+    middleware: "authorize-school",
 
   }
 </script>

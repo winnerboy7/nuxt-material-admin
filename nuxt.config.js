@@ -1,9 +1,8 @@
 const pkg = require("./package");
-
-const VuetifyLoaderPlugin = require("vuetify-loader/lib/plugin");
+import colors from 'vuetify/es5/util/colors'
 
 module.exports = {
-  mode: "spa",
+  ssr: false,
 
   /*
    ** Headers of the page
@@ -42,8 +41,6 @@ module.exports = {
    ** Global CSS
    */
   css: [
-    "~/assets/style/theme.styl",
-    "~/assets/style/app.styl",
     "font-awesome/css/font-awesome.css",
     "roboto-fontface/css/roboto/roboto-fontface.css"
   ],
@@ -52,7 +49,8 @@ module.exports = {
    ** Plugins to load before mounting the App
    */
   plugins: [
-    "@/plugins/vuetify", 
+    // "@/plugins/vuetify", 
+    "~/plugins/vue-swal",
     "@/plugins/vee-validate",
     "~/plugins/axios",
   ],
@@ -63,14 +61,52 @@ module.exports = {
   },
 
   /*
-   ** Nuxt.js modules
-   */
+  ** Auto import components
+  ** See https://nuxtjs.org/api/configuration-components
+  */
+  components: true,
+  /*
+  ** Nuxt.js dev-modules
+  */
+  buildModules: [
+    '@nuxtjs/vuetify',
+  ],
+  /*
+  ** Nuxt.js modules
+  */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    "@nuxtjs/axios",
+    '@nuxtjs/axios',
     // Doc: https://github.com/nuxt-community/proxy-module
     "@nuxtjs/proxy",
+    '@nuxtjs/auth'
   ],
+
+  auth: {
+    localStorage: true,
+    strategies: {
+      local: {
+        endpoints: {
+          login: {
+            url: '/api/auth/login',
+            method: 'post',
+            propertyName: 'token'
+          },
+          logout: { url: '/api/users/logout', method: 'post' },
+          user: {
+            url: '/api/users/me',
+            method: 'get',
+            propertyName: false
+          },
+        },
+      },
+    },
+    redirect: {
+      logout: '/',
+      callback: '/login',
+      home: '/'
+    },
+  },
 
   /*
    ** Axios module configuration
@@ -81,21 +117,27 @@ module.exports = {
     proxy: true // Can be also an object with default options
   },
 
+  vuetify: {
+    customVariables: ['~/assets/variables.scss'],
+    theme: {
+      dark: false,
+      themes: {
+        dark: {
+          primary: colors.blue.darken2,
+          accent: colors.grey.darken3,
+          secondary: colors.amber.darken3,
+          info: colors.teal.lighten1,
+          warning: colors.amber.base,
+          error: colors.deepOrange.accent4,
+          success: colors.green.accent3
+        }
+      }
+    }
+  },
+
   /*
    ** Build configuration
    */
   build: {
-    transpile: ["vuetify/lib"],
-    plugins: [new VuetifyLoaderPlugin()],
-    loaders: {
-      stylus: {
-        import: ["~assets/style/variables.styl"]
-      }
-    },
-
-    /*
-     ** You can extend webpack config here
-     */
-    extend(config, ctx) {}
   }
 };
