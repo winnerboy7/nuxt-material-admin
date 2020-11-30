@@ -25,7 +25,7 @@ const Menu = [
       {name: 'personels', title: 'ทะเบียนบุคลากรใน สพท.', href: '/area/personels'},
       {name: 'teachers-add', title: 'เพิ่มประวัติครู/บุคลากร', href: '/area/teachers/add'},
       {name: 'teachers-update', title: 'ปรับปรุงประวัติครู/บุคลากร', href: '/area/teachers/update'},
-      {name: 'checking', title: 'ตรวจสอบความสมบูรณ์', href: '/area/checking'},
+      // {name: 'checking', title: 'ตรวจสอบความสมบูรณ์', href: '/area/checking'},
       {name: 'cgd-import', title: 'นำเข้าข้อมูลครู/บุคลากร (cgd)', href: '/area/cgd/import'},
       {name: 'export', title: 'ส่งออกข้อมูลครู/บุคลากร', href: '/area/export'},
 

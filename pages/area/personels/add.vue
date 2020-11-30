@@ -3,13 +3,13 @@
     <v-layout row wrap>
       <v-flex sm12 lg12>
 
-        <teacher-form
+        <personel-form
           :title="title"
           :form.sync="form"
           :readonly="readonly"
           @updateForm="onSubmit"
           @handleCheckPersonId="handleCheckPersonId"
-        ></teacher-form>
+        ></personel-form>
 
         <Dialog
           :title="dialogMsg.title"
@@ -26,35 +26,35 @@
 
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
-import { teacherService } from "@/_services/teacher.service";
+import { personelService } from "@/_services/personel.service";
 import moment from "moment";
 import Dialog from "@/components/Dialog";
 import Swal from "sweetalert2";
-import TeacherForm from '@/forms/teacherForm'
+import PersonelForm from '@/forms/personelForm'
 
 export default {
   layout: "area",
   middleware: "authorize-area",  
-  name: "EditTeacher",
+  name: "AddPersonel",
 
   components: {
     Dialog,
-    TeacherForm,
+    PersonelForm,
   },
 
   asyncData({ params }) {
     // called every time before loading the component
     return {
-      personId: params.personId
+      schId: params.schId
     };
   },
 
   data() {
     return {
       //ตัวแปรที่ใช้งาน
-      title: "แก้ไขข้อมูลครูและบุคลากรทางการศึกษา",
-      teacher: [],
-      readonly: true,
+      title: "เพิ่มข้อมูลบุคลากรในสำนักงานเขตพื้นที่การศึกษา",
+      personel: [],
+      readonly: false,
       action: "",
       actionConfirm: "Start",
 
@@ -75,26 +75,21 @@ export default {
         currentStreet: "",
         currentSubdistrictCode: "",
 
-        academicYear: "",
+        academicYear: new Date().getFullYear() + 543,
         semester: "",
         schoolId: "",
         passportNumber: "",
         passportStartDate: "",
         passportEndDate: "",
-        personTypeCode: "",
-        positionCode: "",
-        academicStandingCode: "",
-        teachAcademicLevelCode: "",
-        teachSubjectCode: "",
-        teacherQualificationCode: "",
-        teacherCertificateCode: "",
-        licenseNumber: "",
-        licenseExpiredDate: "",
+        personTypeCode: "10",
+        positionCode: "10000",
+        academicStandingCode: "99",
+        personelQualificationCode: "",
+        personelCertificateCode: "",
         updateDate: "",
         foreignCode: "",
         statusIdcard: "",
         id: "",
-
         district_id: "",
         province_id: "",
       },
@@ -114,96 +109,71 @@ export default {
     }),  
   },
 
-  mounted() {},
-
-  watch: {
-    actionConfirm: function() {
-      this.getTeacher();
-    },
+  mounted() {
+    console.log("MOUNTED PERSONEL");    
+    if (this.schId) {
+      this.form.schoolId = this.schId;
+      console.log(`SchId : ${this.schId}`)
+    }    
   },
+
+  watch: {},
   
   created() {
-    console.log("TEACHER");
-    this.getTeacher();  
+    console.log("CREATED PERSONEL");
+    //this.getPersonel();
     this.setAcademicYear();
     this.setSemester();
+    this.form.academicYear = this.systemConfig.academicYear;
+    this.form.semester = this.systemConfig.semester;
+    // console.log(this.form)
   },
 
-  methods: {    
+  methods: {
     // ดึงข้อมูลคอนฟิกระบบ
     ...mapActions("config", ["setAcademicYear", "setSemester"]),
 
-    // ดึงข้อมูลครู
-    async getTeacher() {
-      console.log("GET TEACHER");
-      try {
-        await teacherService.getById(this.personId).then(response => {
-          [this.teacher] = response;
-          this.title =`แก้ไขข้อมูล ${this.teacher.prefixName.title}${this.teacher.firstName}  ${this.teacher.lastName}`;
-        });
-
-        for (let key in this.form) {
-          this.form[key] = this.teacher[key];
-        }
-        this.form.province_id = this.teacher.subdistrictName.province_id;
-        this.form.district_id = this.teacher.subdistrictName.district_id;
-        
-        this.form.academicYear = this.systemConfig.academicYear;
-        this.form.semester = this.systemConfig.semester;
-
-        this.form.birthdate = this.formatDate(this.form.birthdate);
-        this.form.passportStartDate = this.formatDate(this.form.passportStartDate);
-        this.form.passportEndDate = this.formatDate(this.form.passportEndDate);
-        this.form.licenseExpiredDate = this.formatDate(this.form.licenseExpiredDate);
-        this.form.updateDate = moment().format("YYYYMMDD");
-      } catch (error) {
-        console.log(error);
-      }
-    },
-
     //บันทึกข้อมูล
     onSubmit() {
-      console.log("Updated");
-      var teacherForm = this.form;
+     console.log("ADDED PERSONEL");
+      if (this.handleCheckPersonId()) {
+        this.form.birthdate = moment(this.form.birthdate).format("YYYYMMDD");
+        this.form.passportStartDate = this.form.passportStartDate.length > 0
+            ? moment(this.form.passportStartDate).format("YYYYMMDD")
+            : "00000000";
+        this.form.passportEndDate = this.form.passportEndDate.length > 0
+            ? moment(this.form.passportEndDate).format("YYYYMMDD")
+            : "00000000";
+            
+        this.form.updateDate = moment().format("YYYYMMDD");
+        let d = new Date().getTime();
+        this.actionConfirm = this.action + d;
+        this.action = "update";
 
-      teacherForm.birthdate = moment(teacherForm.birthdate).format("YYYYMMDD");
-      teacherForm.passportStartDate = teacherForm.passportStartDate.length > 0
-          ? moment(teacherForm.passportStartDate).format("YYYYMMDD")
-          : "00000000";
-      teacherForm.passportEndDate = teacherForm.passportEndDate.length > 0
-          ? moment(teacherForm.passportEndDate).format("YYYYMMDD")
-          : "00000000";
-      teacherForm.licenseExpiredDate = teacherForm.licenseExpiredDate.length > 0
-          ? moment(teacherForm.licenseExpiredDate).format("YYYYMMDD")
-          : "00000000";
-      teacherForm.updateDate = moment().format("YYYYMMDD");
-      let d = new Date().getTime();
-      this.actionConfirm = this.action + d;
-      this.action = "update";
+        // console.log(this.form)
 
-      // console.log(this.form)
-
-      teacherService.update(teacherForm).then(
-        (response) => {
-          this.dialogMsg = {
-            title: "เยี่ยมมาก",
-            message: "แก้ไขข้อมูลสำเร็จ",
-            type: "primary",
-            show: true,
-          };
-          // swal("เยี่ยมมาก", "แก้ไขข้อมูลสำเร็จ", "success");
-        },
-        (error) => {
-          console.log(error);
-          this.dialogMsg = {
-            title: "แจ้งเตือน !",
-            message: "เกิดข้อผิดพลาด",
-            type: "error",
-            show: true,
-          };
-          // swal("เกิดข้อผิดพลาด!", "", "error");
-        }
-      );
+        personelService.insert(this.form).then(
+          (response) => {
+            this.dialogMsg = {
+              title: "เยี่ยมมาก",
+              message: "บันทึกข้อมูลสำเร็จ",
+              type: "primary",
+              show: true,
+            };
+            // swal("เยี่ยมมาก", "แก้ไขข้อมูลสำเร็จ", "success");
+          },
+          (error) => {
+            console.log(error);
+            this.dialogMsg = {
+              title: "แจ้งเตือน !",
+              message: "เกิดข้อผิดพลาด",
+              type: "error",
+              show: true,
+            };
+            // swal("เกิดข้อผิดพลาด!", "", "error");
+          }
+        );
+      }
     },
     
     //จัดรูปแบบวันที่ให้เป็น 1990-09-18 จาก 19900918 (YYYYMMDD)
@@ -227,12 +197,12 @@ export default {
         show: false,
       };
     },
-
+    
     //ตรวจสอบเลขประจำตัวประชาชน
     handleCheckPersonId() {
       let value = this.form.personId;
       if (value) {
-        teacherService.getById(value).then(response => {
+        personelService.getById(value).then(response => {
           let [personel] = response;
           let isPass = true;
           if(personel) {

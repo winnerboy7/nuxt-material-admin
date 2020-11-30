@@ -7,8 +7,8 @@
           :title="title"
           :form.sync="form"
           :readonly="readonly"
-          :disabled="disabled"
           @updateForm="onSubmit"
+          @handleCheckPersonId="handleCheckPersonId"
         ></teacher-form>
 
         <Dialog
@@ -55,7 +55,6 @@ export default {
       title: "บันทึกข้อมูลข้อมูลครูและบุคลากรทางการศึกษา",
       teacher: [],
       readonly: false,
-      disabled: false,
       action: "",
       actionConfirm: "Start",
 
@@ -131,7 +130,7 @@ export default {
     this.setSemester();
     this.form.academicYear = this.systemConfig.academicYear;
     this.form.semester = this.systemConfig.semester;
-    console.log(this.form)
+    // console.log(this.form)
   },
 
   methods: {
@@ -203,7 +202,53 @@ export default {
         type: "primary",
         show: false,
       };
-    },   
+    },  
+    
+    //ตรวจสอบเลขประจำตัวประชาชน
+    handleCheckPersonId() {
+      let value = this.form.personId;
+      if (value) {
+        teacherService.getById(value).then(response => {
+          let [personel] = response;
+          let isPass = true;
+          if(personel) {
+            this.dialogMsg = {
+              title: `กรุณาตรวจสอบอีกครั้ง`,
+              message: `เลขบัตรประชาชน ${value} มีในระบบแล้ว`,
+              type: "error",
+              show: true,
+            };
+            this.form.personId = "";
+            console.log(`เลขบัตรประชาชน ${value} มีในระบบแล้ว`);
+            console.log(personel);
+            isPass = false;
+          }
+          else {
+            this.dialogMsg = {
+              title: `ผ่านการตรวจสอบ`,
+              message: `เลขบัตรประชาชน ${value} ผ่าน`,
+              type: "primary",
+              show: true,
+            };
+            console.log(`เลขบัตรประชาชน ${value} ผ่าน`);
+            isPass = false;
+          }
+          return isPass;
+        })
+        .catch(error => {
+          this.dialogMsg = {
+            title: `เกิดข้อผิดพลาด !`,
+            message: `${error}`,
+            type: "error",
+            show: true,
+          };
+          
+          this.form.personId = "";
+          console.log(error)
+          return false;
+        })        
+      }      
+    },
   }
 };
 </script>

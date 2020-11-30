@@ -9,13 +9,12 @@
           </v-toolbar>
           <v-divider></v-divider>
           <v-card-text class="">
-
             <v-layout row>
               <v-flex xs4>
                 <v-subheader>ชื่อ :</v-subheader>
               </v-flex>
               <v-flex xs8>
-                <v-text-field :value=" user.name" dense></v-text-field>
+                <v-text-field :value="user.name" dense></v-text-field>
               </v-flex>
             </v-layout>
 
@@ -24,7 +23,7 @@
                 <v-subheader>ชื่อผู้ใช้งาน :</v-subheader>
               </v-flex>
               <v-flex xs8>
-                <v-text-field :value=" user.username" dense></v-text-field>
+                <v-text-field :value="user.username" dense></v-text-field>
               </v-flex>
             </v-layout>
 
@@ -33,19 +32,16 @@
                 <v-subheader>อีเมล์ :</v-subheader>
               </v-flex>
               <v-flex xs8>
-                <v-text-field :value=" user.email" dense></v-text-field>
+                <v-text-field :value="user.email" dense></v-text-field>
               </v-flex>
             </v-layout>
 
-            <v-layout
-              row
-              v-if="user.areaCode"
-            >
+            <v-layout row v-if="user.areaCode">
               <v-flex xs4>
                 <v-subheader>สังกัด :</v-subheader>
               </v-flex>
               <v-flex xs8>
-                <v-text-field :value=" user.areaName" dense></v-text-field>
+                <v-text-field :value="user.areaName" dense></v-text-field>
               </v-flex>
             </v-layout>
 
@@ -54,30 +50,22 @@
                 <v-subheader>ตำแหน่ง :</v-subheader>
               </v-flex>
               <v-flex xs8>
-                <v-text-field :value=" user.level" dense></v-text-field>
+                <v-text-field :value="user.level" dense></v-text-field>
               </v-flex>
             </v-layout>
 
-            <v-btn
-              color="success"
-              class="mr-4"
-              @click="update()"
-            >
+            <v-btn color="success" class="mr-4" @click="update()">
               แก้ไขข้อมูล
             </v-btn>
 
-            <v-btn
-              color="error"
-              class="mr-4"
-              @click="updatePass()"
-            >
+            <v-btn color="error" class="mr-4" @click="updatePass()">
               เปลี่ยนรหัสผ่าน
             </v-btn>
             <cite class="float-right">แก้ไขล่าสุด : {{ user.updatedAt }}</cite>
           </v-card-text>
         </v-card>
       </v-flex>
-      
+
       <v-dialog
         v-model="dialogInfo"
         fullscreen
@@ -86,9 +74,12 @@
       >
         <v-card tile>
           <ValidationObserver ref="observer" v-slot="{ handleSubmit }">
-            <v-form ref="form" @keyup.native.enter="handleSubmit(onSubmit)">              
+            <v-form ref="form" @keyup.native.enter="handleSubmit(onSubmit)">
               <v-toolbar dark color="primary">
-                <v-toolbar-title><v-icon>mdi-pencil</v-icon> {{ formItem.title }}</v-toolbar-title>
+                <v-toolbar-title
+                  ><v-icon>mdi-pencil</v-icon>
+                  {{ formItem.title }}</v-toolbar-title
+                >
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
                   <v-btn icon text @click="handleSubmit(onSubmit)">
@@ -100,7 +91,7 @@
                 </v-toolbar-items>
               </v-toolbar>
 
-              <v-card-text>            
+              <v-card-text>
                 <!-- <ValidationProvider name="ชื่อผู้ใช้งาน" v-slot="validationContext" :rules="{ required: true }" >                     
                   <v-text-field
                     v-model="form.username"
@@ -213,30 +204,31 @@
                   color="success"
                   class="mr-4"
                   @click="handleSubmit(onSubmit)"
-                >ตกลง</v-btn>
-                <v-btn
-                  color="warning"
-                  text
-                  @click="dialogInfo = false"
-                >ปิด</v-btn>
+                  >ตกลง</v-btn
+                >
+                <v-btn color="warning" text @click="dialogInfo = false"
+                  >ปิด</v-btn
+                >
               </v-card-text>
 
               <div style="flex: 1 1 auto;"></div>
-          
             </v-form>
           </ValidationObserver>
         </v-card>
       </v-dialog>
 
-      <v-dialog
-        v-model="dialogPassword"
-        max-width="500px"
-      >
+      <v-dialog v-model="dialogPassword" max-width="500px">
         <v-card>
-          <ValidationObserver ref="observer"  v-slot="{ handleSubmit }">
-            <v-form ref="formPassword" @keyup.native.enter="handleSubmit(onSubmitPassword)">
+          <ValidationObserver ref="observer" v-slot="{ handleSubmit }">
+            <v-form
+              ref="formPassword"
+              @keyup.native.enter="handleSubmit(onSubmitPassword)"
+            >
               <v-toolbar dark color="primary">
-                <v-toolbar-title><v-icon>mdi-pencil</v-icon> {{ formItem.title }}</v-toolbar-title>
+                <v-toolbar-title
+                  ><v-icon>mdi-pencil</v-icon>
+                  {{ formItem.title }}</v-toolbar-title
+                >
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
                   <v-btn icon text @click="handleSubmit(onSubmitPassword)">
@@ -281,16 +273,14 @@
                   color="success"
                   class="mr-4"
                   @click="handleSubmit(onSubmitPassword)"
-                >ตกลง</v-btn>
-                <v-btn
-                  color="warning"
-                  text
-                  @click="dialogPassword = false"
-                >ปิด</v-btn>
+                  >ตกลง</v-btn
+                >
+                <v-btn color="warning" text @click="dialogPassword = false"
+                  >ปิด</v-btn
+                >
               </v-card-text>
 
-              <v-card-actions>
-              </v-card-actions>          
+              <v-card-actions> </v-card-actions>
             </v-form>
           </ValidationObserver>
         </v-card>
@@ -303,7 +293,6 @@
         :show="dialogMsg.show"
         @onOk="onOk"
       ></Dialog>
-
     </v-layout>
   </v-container>
 </template>
@@ -322,7 +311,7 @@ import {
   ValidationObserver,
   ValidationProvider,
   extend,
-  localize,
+  localize
 } from "vee-validate";
 import th from "vee-validate/dist/locale/th.json";
 import * as rules from "vee-validate/dist/rules";
@@ -334,7 +323,7 @@ export default {
   components: {
     ValidationObserver,
     ValidationProvider,
-    Dialog,
+    Dialog
   },
 
   data() {
@@ -346,7 +335,7 @@ export default {
       formItem: {
         id: "update-modal",
         title: "",
-        content: "",
+        content: ""
       },
 
       dialogInfo: false,
@@ -360,36 +349,36 @@ export default {
         areaCode: "",
         level: "",
         role: "",
-        status: "1",
+        status: "1"
       },
       formPassword: {
         username: "",
-        password: null,
+        password: null
       },
 
       action: "",
       actionConfirm: "Start",
       readonly: true,
-      disabled: false,      
-      
+      disabled: false,
+
       roles: [
         { level: "Admin", text: "Admin" },
         { level: "Area", text: "Area" },
-        { level: "School", text: "School" },
+        { level: "School", text: "School" }
       ],
 
       dialogMsg: {
         title: "",
         message: "",
         type: "",
-        show: false,
-      },
+        show: false
+      }
     };
   },
 
   computed: {
     ...mapState({
-      account: (state) => state.account,
+      account: state => state.account
     }),
 
     // readonly() {
@@ -400,7 +389,7 @@ export default {
     // },
     Role() {
       return Role;
-    },
+    }
   },
 
   created() {
@@ -408,7 +397,7 @@ export default {
     this.getAreas();
 
     // Install VeeValidate rules and localization
-    Object.keys(rules).forEach((rule) => {
+    Object.keys(rules).forEach(rule => {
       extend(rule, rules[rule]);
     });
     localize("th", th);
@@ -419,8 +408,10 @@ export default {
       try {
         [this.user] = await userService.getProfile(this.account.user.username);
 
-        moment.locale('th');
-        this.user["updatedAt"] = moment(this.user["updatedAt"]).add(543, 'year').format('LLLL');
+        moment.locale("th");
+        this.user["updatedAt"] = moment(this.user["updatedAt"])
+          .add(543, "year")
+          .format("LLLL");
         // this.user["updatedAt"] = moment(this.user["updatedAt"]).format("DD-MM-YYYY HH:mm:ss");
 
         for (let key in this.form) {
@@ -438,7 +429,7 @@ export default {
         console.log(error);
       }
     },
-    getSelectedArea: function () {
+    getSelectedArea: function() {
       //console.log(this.selected);
     },
 
@@ -477,22 +468,22 @@ export default {
         console.log("Updated");
         this.updateUsername = "";
         userService.update(this.form).then(
-          (response) => {
+          response => {
             this.dialogMsg = {
               title: "เยี่ยมมาก",
               message: "แก้ไขข้อมูลสำเร็จ",
               type: "primary",
-              show: true,
+              show: true
             };
             // swal("เยี่ยมมาก", "แก้ไขข้อมูลสำเร็จ", "success");
           },
-          (error) => {
+          error => {
             console.log(error);
             this.dialogMsg = {
               title: "แจ้งเตือน !",
               message: "เกิดข้อผิดพลาด",
               type: "error",
-              show: true,
+              show: true
             };
 
             // swal("เกิดข้อผิดพลาด!", "", "error");
@@ -503,23 +494,23 @@ export default {
         console.log(this.form);
         this.insertUsername = this.form.username;
         userService.insert(this.form).then(
-          (response) => {
+          response => {
             this.dialogMsg = {
               title: "เยี่ยมมาก",
               message: "บันทึกข้อมูลสำเร็จ",
               type: "primary",
-              show: true,
+              show: true
             };
 
             // swal("เยี่ยมมาก", "บันทึกข้อมูลสำเร็จ", "success");
           },
-          (error) => {
+          error => {
             console.log(error);
             this.dialogMsg = {
               title: "แจ้งเตือน !",
               message: "เกิดข้อผิดพลาด",
               type: "error",
-              show: true,
+              show: true
             };
 
             // swal("เกิดข้อผิดพลาด!", "", "error");
@@ -542,23 +533,23 @@ export default {
       console.log("Updated Password");
       this.updatePassword = "";
       userService.updatePassword(this.formPassword).then(
-        (response) => {
+        response => {
           this.dialogMsg = {
             title: "เยี่ยมมาก",
             message: "เปลี่ยนรหัสผ่านสำเร็จ",
             type: "primary",
-            show: true,
+            show: true
           };
 
           // swal("เยี่ยมมาก", "เปลี่ยนรหัสผ่านสำเร็จ", "success");
         },
-        (error) => {
+        error => {
           console.log(error);
           this.dialogMsg = {
             title: "แจ้งเตือน !",
             message: "เกิดข้อผิดพลาด",
             type: "error",
-            show: true,
+            show: true
           };
 
           // swal("เกิดข้อผิดพลาด!", "", "error");
@@ -578,9 +569,9 @@ export default {
         title: "",
         message: "",
         type: "primary",
-        show: false,
+        show: false
       };
-    },
+    }
 
     // onReset(evt) {
     //   for (let key in this.form) {
@@ -598,9 +589,9 @@ export default {
   },
 
   watch: {
-    actionConfirm: function () {
+    actionConfirm: function() {
       this.getUsers();
-    },
-  },
+    }
+  }
 };
 </script>

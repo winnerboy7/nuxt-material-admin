@@ -321,25 +321,6 @@
               <v-card flat>
                 <v-card-text>
 
-                  <ValidationProvider
-                    name="โรงเรียน"
-                    v-slot="{ errors }"
-                    rules="required"
-                  >
-                    <v-autocomplete
-                      v-model="form.schoolId"
-                      :items="optionsSchools"
-                      item-value="schId"
-                      item-text="schName"
-                      filled
-                      :error-messages="errors"
-                      label="โรงเรียน"
-                      data-vv-name="select-school"
-                      required
-                      dense
-                    ></v-autocomplete>
-                  </ValidationProvider>
-
                   <!-- <v-autocomplete
                     v-model="form.semester"
                     :items="optionsSemester"
@@ -413,76 +394,6 @@
                     ></v-autocomplete>
                   </ValidationProvider>
 
-                  <ValidationProvider
-                    name="ระดับที่สอน"
-                    v-slot="{ errors }"
-                    rules="required"
-                  >
-                    <v-autocomplete
-                      v-model="form.teachAcademicLevelCode"
-                      :items="optionsTeachAcademicLevelCode"
-                      item-value="id"
-                      item-text="title"
-                      filled
-                      :error-messages="errors"
-                      label="ระดับที่สอน"
-                      data-vv-name="select-teachAcademicLevelCode"
-                      required
-                      dense
-                    ></v-autocomplete>
-                  </ValidationProvider>
-
-                  <ValidationProvider
-                    name="กลุ่มสาระการเรียนรู้"
-                    v-slot="{ errors }"
-                    rules="required"
-                  >
-                    <v-autocomplete
-                      v-model="form.teachSubjectCode"
-                      :items="optionsTeachSubjectCode"
-                      item-value="id"
-                      item-text="title"
-                      filled
-                      :error-messages="errors"
-                      label="กลุ่มสาระการเรียนรู้"
-                      data-vv-name="select-teachSubjectCode"
-                      required
-                      dense
-                    ></v-autocomplete>
-                  </ValidationProvider>
-
-                  <v-text-field
-                    v-model="form.licenseNumber"
-                    label="หมายเลขใบประกอบวิชาชีพ"
-                    dense
-                  ></v-text-field>
-
-                  <v-menu
-                    v-model="menuLicenseExpiredDate"
-                    :close-on-content-click="false"
-                    :nudge-right="40"
-                    transition="scale-transition"
-                    offset-y
-                    min-width="290px"
-                  >
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-text-field
-                        v-model="form.licenseExpiredDate"
-                        label="วันหมดอายุใบประกอบวิชาชีพ"
-                        prepend-icon="mdi-calendar"
-                        readonly
-                        v-bind="attrs"
-                        v-on="on"
-                        dense
-                      ></v-text-field>
-                    </template>
-                    <v-date-picker
-                      v-model="form.licenseExpiredDate"
-                      locale="TH-th"
-                      @input="menuLicenseExpiredDate = false"
-                    ></v-date-picker>
-                  </v-menu>
-
                 </v-card-text>
               </v-card>
             </v-tab-item>
@@ -509,9 +420,9 @@
 
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
-import { teacherService } from "@/_services/teacher.service";
+import { personelService } from "@/_services/personel.service";
 import { standardcodeService } from "@/_services/standardcode.service";
-import { schoolService } from "@/_services/school.service";
+// import { schoolService } from "@/_services/school.service";
 
 import {
   ValidationObserver,
@@ -523,7 +434,7 @@ import th from "vee-validate/dist/locale/th.json";
 import * as rules from "vee-validate/dist/rules";
 
 export default {
-  name: 'teacherForm',
+  name: 'personelForm',
 
   components: {
     ValidationObserver,
@@ -540,13 +451,13 @@ export default {
 
   data: () => ({
     disabled: true,
-    
+
     menuStartDate: false,
     menuExpireDate: false,
     menuBirthday: false,
     menuLicenseExpiredDate: false,
 
-    optionsSchools: [],
+    // optionsSchools: [],
     optionsPrefix: [],
     optionsGender: [],
     optionsNationality: [],
@@ -555,8 +466,8 @@ export default {
     optionsDistrict: [],
     optionsPersonTypeCode: [],
     optionsPositionCode: [],
-    optionsTeachAcademicLevelCode: [],
-    optionsTeachSubjectCode: [],
+    // optionsTeachAcademicLevelCode: [],
+    // optionsTeachSubjectCode: [],
     optionsAcademicStandingCode: [],
     optionsSemester: [{id:"1", title: "ภาคเรียนที่ 1"},{id:"2", title: "ภาคเรียนที่ 2"}],
   }),
@@ -568,17 +479,17 @@ export default {
   },
 
   mounted() {    
-    console.log("TEACHER");
-    // this.getTeacher();
+    console.log("PERSONEL");
+    // this.getPersonel();
 
-    this.getSchools();
+    // this.getSchools();
     this.getPrefix();
     this.getGender();
     this.getNationality();
     this.getPersonTypeCode();
     this.getPositionCode();
-    this.getTeachAcademicLevelCode();
-    this.getTeachSubjectCode();
+    // this.getTeachAcademicLevelCode();
+    // this.getTeachSubjectCode();
     this.getAcademicStandingCode();
     this.getProvince();
     this.getDistrict();
@@ -598,23 +509,20 @@ export default {
     //ตรวจสอบหมายเลขบัตรประชาชน
     // personId: function(value) {
     //   if (value.length === 13) {
-    //     this.getTeacher();
+    //     this.getPersonel();
     //   }
     // },
     'form.personId': {
       handler: function(value) {
         if (!this.readonly)  {
-          if(value.length >=6 && value.length <= 13) {
-          this.disabled = false;
+          if(value.length === 13) {
+            this.disabled = false;
+            this.handleCheckPersonId();
           }
           else {
             this.disabled = true;
           }
-
-          if (value.length === 13) {
-            this.handleCheckPersonId();
-          }
-        }        
+        }
       },
     },
 
@@ -633,11 +541,11 @@ export default {
     },
 
     //ดึงโรงเรียน
-    getSchools() {
-      schoolService.getByArea(this.account.user.areaCode).then(response => {
-        this.optionsSchools = response;
-      });
-    },
+    // getSchools() {
+    //   schoolService.getByArea(this.account.user.areaCode).then(response => {
+    //     this.optionsSchools = response;
+    //   });
+    // },
 
     //ดึงคำนำหน้า
     getPrefix() {
@@ -675,18 +583,18 @@ export default {
     },
 
     //ดึงข้อมูลระดับที่สอน
-    getTeachAcademicLevelCode() {
-      standardcodeService.getTeachAcademicLevelCode().then(response => {
-        this.optionsTeachAcademicLevelCode = response;
-      });
-    },
+    // getTeachAcademicLevelCode() {
+    //   standardcodeService.getTeachAcademicLevelCode().then(response => {
+    //     this.optionsTeachAcademicLevelCode = response;
+    //   });
+    // },
 
     //ดึงข้อมูลกลุ่มสาระฯ
-    getTeachSubjectCode() {
-      standardcodeService.getTeachSubjectCode().then(response => {
-        this.optionsTeachSubjectCode = response;
-      });
-    },
+    // getTeachSubjectCode() {
+    //   standardcodeService.getTeachSubjectCode().then(response => {
+    //     this.optionsTeachSubjectCode = response;
+    //   });
+    // },
 
     //ดึงข้อมูลวิทยฐานะ
     getAcademicStandingCode() {

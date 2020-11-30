@@ -1,18 +1,8 @@
 <template>
-  <v-container
-    grid-list-xl
-    fluid
-  >
-    <v-layout
-      row
-      wrap
-    >
+  <v-container grid-list-xl fluid>
+    <v-layout row wrap>
       <!-- mini statistic start -->
-      <v-flex
-        lg3
-        sm6
-        xs12
-      >
+      <v-flex lg3 sm6 xs12>
         <mini-statistic
           icon="fa fa-bar-chart"
           :title="cntTeacher.toLocaleString()"
@@ -21,11 +11,7 @@
         >
         </mini-statistic>
       </v-flex>
-      <v-flex
-        lg3
-        sm6
-        xs12
-      >
+      <v-flex lg3 sm6 xs12>
         <mini-statistic
           icon="fa fa-bar-chart"
           :title="cntTeacherAll.toLocaleString()"
@@ -34,11 +20,7 @@
         >
         </mini-statistic>
       </v-flex>
-      <v-flex
-        lg3
-        sm6
-        xs12
-      >
+      <v-flex lg3 sm6 xs12>
         <mini-statistic
           icon="fa fa-bar-chart"
           :title="cntPersonel.toLocaleString()"
@@ -47,11 +29,7 @@
         >
         </mini-statistic>
       </v-flex>
-      <v-flex
-        lg3
-        sm6
-        xs12
-      >
+      <v-flex lg3 sm6 xs12>
         <mini-statistic
           icon="fa fa-bar-chart"
           :title="cntSchool.toLocaleString()"
@@ -61,18 +39,9 @@
         </mini-statistic>
       </v-flex>
 
-      <v-flex
-        sm12
-        lg12
-      >
+      <v-flex sm12 lg12>
         <v-card class="mb-4">
-          <v-toolbar
-            color="primary darken-1"
-            dark
-            flat
-            dense
-            cad
-          >
+          <v-toolbar color="primary darken-1" dark flat dense cad>
             <v-toolbar-title class="subheading">{{ title }}</v-toolbar-title>
             <v-spacer></v-spacer>
           </v-toolbar>
@@ -97,10 +66,10 @@ import MiniStatistic from "@/components/widgets/statistic/MiniStatistic";
 
 export default {
   layout: "area",
-  middleware: ['auth', 'authorize-area'],
+  middleware: ["auth", "authorize-area"],
 
   components: {
-    MiniStatistic,
+    MiniStatistic
   },
 
   data() {
@@ -109,14 +78,14 @@ export default {
       cntSchool: 0,
       cntTeacher: 0,
       cntTeacherAll: 0,
-      cntPersonel: 0,
+      cntPersonel: 0
     };
   },
 
   computed: {
     ...mapState({
-      account: (state) => state.account,
-    }),
+      account: state => state.account
+    })
   },
 
   created() {
@@ -153,10 +122,9 @@ export default {
         this.account.user.areaCode
       );
       this.cntPersonel = count;
-    },
-  },
+    }
+  }
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
