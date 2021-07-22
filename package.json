@@ -31,7 +31,7 @@
     "vue-perfect-scrollbar": "^0.1.0",
     "vue-quill-editor": "^3.0.6",
     "vue-swal": "^1.0.0",
-    "xlsx": "^0.16.8"
+    "xlsx": "^0.17.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.5",
