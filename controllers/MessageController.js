@@ -1,6 +1,6 @@
 import HttpRequest from './http_request'
 
-class MessageProvider extends HttpRequest {
+class MessageController extends HttpRequest {
   sendMessage (data) {
     return this.create('/api/standardcode/prefix', data)
   }
@@ -18,4 +18,4 @@ class MessageProvider extends HttpRequest {
   }
 }
 
-export default MessageProvider
+export default MessageController

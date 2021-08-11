@@ -71,7 +71,7 @@
                                   ></v-text-field>
                                 </ValidationProvider>
 
-                                <ValidationProvider
+                                <!-- <ValidationProvider
                                   name="รหัส SMIS CODE"
                                   v-slot="{ errors }"
                                   rules="required|digits:8"
@@ -82,7 +82,7 @@
                                     label="รหัส SMIS CODE"
                                     dense
                                   ></v-text-field>
-                                </ValidationProvider>
+                                </ValidationProvider> -->
 
                                 <ValidationProvider
                                   name="ชื่อโรงเรียน"
@@ -97,7 +97,7 @@
                                   ></v-text-field>
                                 </ValidationProvider>
 
-                                <ValidationProvider
+                                <!-- <ValidationProvider
                                   name="ประเภทสถานศึกษา"
                                   v-slot="{ errors }"
                                   rules="required"
@@ -146,7 +146,7 @@
                                     data-vv-name="select-school-position"
                                     required
                                   ></v-select>
-                                </ValidationProvider>
+                                </ValidationProvider> -->
                                 
                                 <ValidationProvider
                                   name="สังกัด"
@@ -181,6 +181,25 @@
                                 </ValidationProvider>
 
                                 <ValidationProvider
+                                  name="ประเภทสถานศึกษา"
+                                  v-slot="{ errors }"
+                                  rules="required"
+                                >
+                                  <v-autocomplete
+                                    v-model="form.typeSch"
+                                    :items="optionsSchoolType"
+                                    item-value="id"
+                                    item-text="title"
+                                    filled
+                                    :error-messages="errors"
+                                    label="ประเภทสถานศึกษา"
+                                    data-vv-name="select-schoolType"
+                                    required
+                                    dense
+                                  ></v-autocomplete>
+                                </ValidationProvider>
+
+                                <!-- <ValidationProvider
                                   name="จำนวนห้อง"
                                   v-slot="{ errors }"
                                   rules="required|numeric"
@@ -204,7 +223,7 @@
                                     label="จำนวนนักเรียน"
                                     dense
                                   ></v-text-field>
-                                </ValidationProvider>
+                                </ValidationProvider> -->
 
                               </v-card-text>
                             </v-card>
@@ -212,6 +231,33 @@
                           <v-tab-item>
                             <v-card flat>
                               <v-card-text>
+
+                                <ValidationProvider
+                                  name="บ้านเลขที่ - บ้าน"
+                                  v-slot="{ errors }"
+                                  rules="required"
+                                >
+                                  <v-text-field
+                                    v-model="form.addnum"
+                                    :error-messages="errors"
+                                    label="บ้านเลขที่ - บ้าน"
+                                    dense
+                                  ></v-text-field>
+                                </ValidationProvider>
+
+                                <ValidationProvider
+                                  name="หมู่"
+                                  v-slot="{ errors }"
+                                  rules="required"
+                                >
+                                  <v-text-field
+                                    v-model="form.moo"
+                                    :error-messages="errors"
+                                    label="หมู่"
+                                    dense
+                                  ></v-text-field>
+                                </ValidationProvider>
+
                                 <ValidationProvider
                                   name="ตำบล"
                                   v-slot="{ errors }"
@@ -247,6 +293,58 @@
                                     v-model="form.province"
                                     :error-messages="errors"
                                     label="จังหวัด"
+                                    dense
+                                  ></v-text-field>
+                                </ValidationProvider>
+
+                                <ValidationProvider
+                                  name="รหัสไปรษณีย์"
+                                  v-slot="{ errors }"
+                                  rules="required"
+                                >
+                                  <v-text-field
+                                    v-model="form.postCode"
+                                    :error-messages="errors"
+                                    label="รหัสไปรษณีย์"
+                                    dense
+                                  ></v-text-field>
+                                </ValidationProvider>
+
+                                <ValidationProvider
+                                  name="โทรศัพท์"
+                                  v-slot="{ errors }"
+                                  rules="required"
+                                >
+                                  <v-text-field
+                                    v-model="form.phone"
+                                    :error-messages="errors"
+                                    label="โทรศัพท์"
+                                    dense
+                                  ></v-text-field>
+                                </ValidationProvider>
+
+                                <ValidationProvider
+                                  name="เปิดระดับการศึกษาชั้นต่ำสุด"
+                                  v-slot="{ errors }"
+                                  rules="required"
+                                >
+                                  <v-text-field
+                                    v-model="form.minClassLevel"
+                                    :error-messages="errors"
+                                    label="เปิดระดับการศึกษาชั้นต่ำสุด"
+                                    dense
+                                  ></v-text-field>
+                                </ValidationProvider>
+
+                                <ValidationProvider
+                                  name="เปิดระดับการศึกษาชั้นสูงสุด"
+                                  v-slot="{ errors }"
+                                  rules="required"
+                                >
+                                  <v-text-field
+                                    v-model="form.maxClassLevel"
+                                    :error-messages="errors"
+                                    label="เปิดระดับการศึกษาชั้นสูงสุด"
                                     dense
                                   ></v-text-field>
                                 </ValidationProvider>
@@ -373,12 +471,12 @@
                                 </v-list-item-content>
                               </v-list-item>
 
-                              <v-list-item>
+                              <!-- <v-list-item>
                                 <v-list-item-content>
                                   <v-list-item-title>รหัส SMIS</v-list-item-title>
                                   <v-list-item-subtitle>{{ form.smis_code}}</v-list-item-subtitle>
                                 </v-list-item-content>
-                              </v-list-item>
+                              </v-list-item> -->
 
                               <v-list-item>
                                 <v-list-item-content>
@@ -387,7 +485,7 @@
                                 </v-list-item-content>
                               </v-list-item>
 
-                              <v-list-item>
+                              <!-- <v-list-item>
                                 <v-list-item-content>
                                   <v-list-item-title>ประเภท</v-list-item-title>
                                   <v-list-item-subtitle> {{ schoolType(form.school_type) }}</v-list-item-subtitle>
@@ -415,12 +513,21 @@
                                     ตำบล{{ form.subdistrict + " อำเภอ" + form.district + " จังหวัด" + form.province }}
                                   </v-list-item-subtitle>
                                 </v-list-item-content>
+                              </v-list-item> -->
+
+                              <v-list-item>
+                                <v-list-item-content>
+                                  <v-list-item-title>ประเภทสถานศึกษา</v-list-item-title>
+                                  <v-list-item-subtitle>{{schoolType(form.typeSch)}}</v-list-item-subtitle>
+                                </v-list-item-content>
                               </v-list-item>
 
                               <v-list-item>
                                 <v-list-item-content>
-                                  <v-list-item-title>พิกัด GPS </v-list-item-title>
-                                  <v-list-item-subtitle>{{ form.latitude + ", " + form.longitude }}</v-list-item-subtitle>
+                                  <v-list-item-title>ที่อยู่</v-list-item-title>
+                                  <v-list-item-subtitle>
+                                    {{ "เลขที่ " + selectedItem.addnum + " หมู่ " + selectedItem.moo+ "  ตำบล" + selectedItem.subdistrict + " อำเภอ" + selectedItem.district + " จังหวัด" + selectedItem.province + " รหัสไปรษณีย์ " + selectedItem.postCode }}
+                                  </v-list-item-subtitle>
                                 </v-list-item-content>
                               </v-list-item>
 
@@ -433,14 +540,29 @@
                         <v-card flat>
                           <v-card-text>
                             <v-list dense>
+
                               <v-list-item>
                                 <v-list-item-content>
-                                  <v-list-item-title>เปิดระดับการศึกษาชั้นสูงสุด</v-list-item-title>
-                                  <v-list-item-subtitle>{{ form.maxClassLevel}}</v-list-item-subtitle>
+                                  <v-list-item-title>เปิดระดับการศึกษาชั้นต่ำสุด</v-list-item-title>
+                                  <v-list-item-subtitle>{{ selectedItem.minClassLevel}}</v-list-item-subtitle>
                                 </v-list-item-content>
                               </v-list-item>
 
                               <v-list-item>
+                                <v-list-item-content>
+                                  <v-list-item-title>เปิดระดับการศึกษาชั้นสูงสุด</v-list-item-title>
+                                  <v-list-item-subtitle>{{ selectedItem.maxClassLevel}}</v-list-item-subtitle>
+                                </v-list-item-content>
+                              </v-list-item>
+
+                              <v-list-item>
+                                <v-list-item-content>
+                                  <v-list-item-title>พิกัด GPS </v-list-item-title>
+                                  <v-list-item-subtitle>{{ selectedItem.latitude + ", " + selectedItem.longitude }}</v-list-item-subtitle>
+                                </v-list-item-content>
+                              </v-list-item>
+
+                              <!-- <v-list-item>
                                 <v-list-item-content>
                                   <v-list-item-title>จำนวนห้อง</v-list-item-title>
                                   <v-list-item-subtitle>{{ form.sumRoom }} ห้อง</v-list-item-subtitle>
@@ -452,7 +574,7 @@
                                   <v-list-item-title>จำนวนนักเรียน</v-list-item-title>
                                   <v-list-item-subtitle>{{ form.sumStudents.toLocaleString() }} คน</v-list-item-subtitle>
                                 </v-list-item-content>
-                              </v-list-item>
+                              </v-list-item> -->
 
                             </v-list>
                           </v-card-text>
@@ -721,8 +843,8 @@ export default {
     this.getSchools();
     this.getAreas();
     this.getSchoolType();
-    this.getSchoolSpecial();
-    this.getSchoolPosition();
+    // this.getSchoolSpecial();
+    // this.getSchoolPosition();
 
     // Install VeeValidate rules and localization
     Object.keys(rules).forEach(rule => {
@@ -750,9 +872,7 @@ export default {
     async getSchools() {
       try {
         // 1000101723
-        console.log(
-          `Area : ${this.$store.state.account.user.areaName} (${this.$store.state.account.user.areaCode})`
-        );
+        console.log(`Area : ${this.$store.state.account.user.areaName} (${this.$store.state.account.user.areaCode})`);
         this.title = `ข้อมูลโรงเรียนใน ${this.$store.state.account.user.areaName} (${this.$store.state.account.user.areaCode})`;
         this.schools = await schoolService.getByArea(
           this.$store.state.account.user.areaCode

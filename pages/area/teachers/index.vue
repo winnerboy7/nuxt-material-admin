@@ -56,12 +56,12 @@
                                 </v-list-item-content>
                               </v-list-item>
 
-                              <v-list-item>
+                              <!-- <v-list-item>
                                 <v-list-item-content>
                                   <v-list-item-title>รหัส SMIS</v-list-item-title>
                                   <v-list-item-subtitle>{{ form.smis_code}}</v-list-item-subtitle>
                                 </v-list-item-content>
-                              </v-list-item>
+                              </v-list-item> -->
 
                               <v-list-item>
                                 <v-list-item-content>
@@ -70,7 +70,7 @@
                                 </v-list-item-content>
                               </v-list-item>
 
-                              <v-list-item>
+                              <!-- <v-list-item>
                                 <v-list-item-content>
                                   <v-list-item-title>ประเภท</v-list-item-title>
                                   <v-list-item-subtitle> {{ schoolType(form.school_type) }}</v-list-item-subtitle>
@@ -98,12 +98,21 @@
                                     ตำบล{{ form.subdistrict + " อำเภอ" + form.district + " จังหวัด" + form.province }}
                                   </v-list-item-subtitle>
                                 </v-list-item-content>
+                              </v-list-item> -->
+
+                              <v-list-item>
+                                <v-list-item-content>
+                                  <v-list-item-title>ประเภทสถานศึกษา</v-list-item-title>
+                                  <v-list-item-subtitle>{{schoolType(form.typeSch)}}</v-list-item-subtitle>
+                                </v-list-item-content>
                               </v-list-item>
 
                               <v-list-item>
                                 <v-list-item-content>
-                                  <v-list-item-title>พิกัด GPS </v-list-item-title>
-                                  <v-list-item-subtitle>{{ form.latitude + ", " + form.longitude }}</v-list-item-subtitle>
+                                  <v-list-item-title>ที่อยู่</v-list-item-title>
+                                  <v-list-item-subtitle>
+                                    {{ "เลขที่ " + selectedItem.addnum + " หมู่ " + selectedItem.moo+ "  ตำบล" + selectedItem.subdistrict + " อำเภอ" + selectedItem.district + " จังหวัด" + selectedItem.province + " รหัสไปรษณีย์ " + selectedItem.postCode }}
+                                  </v-list-item-subtitle>
                                 </v-list-item-content>
                               </v-list-item>
 
@@ -118,12 +127,26 @@
                             <v-list dense>
                               <v-list-item>
                                 <v-list-item-content>
-                                  <v-list-item-title>เปิดระดับการศึกษาชั้นสูงสุด</v-list-item-title>
-                                  <v-list-item-subtitle>{{ form.maxClassLevel}}</v-list-item-subtitle>
+                                  <v-list-item-title>เปิดระดับการศึกษาชั้นต่ำสุด</v-list-item-title>
+                                  <v-list-item-subtitle>{{ selectedItem.minClassLevel}}</v-list-item-subtitle>
                                 </v-list-item-content>
                               </v-list-item>
 
                               <v-list-item>
+                                <v-list-item-content>
+                                  <v-list-item-title>เปิดระดับการศึกษาชั้นสูงสุด</v-list-item-title>
+                                  <v-list-item-subtitle>{{ selectedItem.maxClassLevel}}</v-list-item-subtitle>
+                                </v-list-item-content>
+                              </v-list-item>
+
+                              <v-list-item>
+                                <v-list-item-content>
+                                  <v-list-item-title>พิกัด GPS </v-list-item-title>
+                                  <v-list-item-subtitle>{{ selectedItem.latitude + ", " + selectedItem.longitude }}</v-list-item-subtitle>
+                                </v-list-item-content>
+                              </v-list-item>
+
+                              <!-- <v-list-item>
                                 <v-list-item-content>
                                   <v-list-item-title>จำนวนห้อง</v-list-item-title>
                                   <v-list-item-subtitle>{{ form.sumRoom }} ห้อง</v-list-item-subtitle>
@@ -135,7 +158,7 @@
                                   <v-list-item-title>จำนวนนักเรียน</v-list-item-title>
                                   <v-list-item-subtitle>{{ form.sumStudents.toLocaleString() }} คน</v-list-item-subtitle>
                                 </v-list-item-content>
-                              </v-list-item>
+                              </v-list-item> -->
 
                             </v-list>
                           </v-card-text>

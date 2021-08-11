@@ -39,6 +39,19 @@ class TeacherController extends HttpRequest {
   delete (id) {
     return this.delete(`/api/teachers/${id}`, id)
   }
+  
+  getTeacherEdu(id) {
+    return this.fetch(`/api/teachers/edu/${id}`)
+  }
+  insertTeacherEdu (teacher) {
+    return this.create(`/api/teachers/edu/`, teacher)
+  }
+  updateTeacherEdu (teacher) {
+    return this.update(`/api/teachers/edu/${teacher._id}`, teacher)
+  }
+  deleteTeacherEdu (id) {
+    return this.delete(`/api/teachers/edu/${id}`, id)
+  }
 }
 
 export default TeacherController

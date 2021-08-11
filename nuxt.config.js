@@ -79,7 +79,9 @@ module.exports = {
     '@nuxtjs/axios',
     // Doc: https://github.com/nuxt-community/proxy-module
     "@nuxtjs/proxy",
-    '@nuxtjs/auth'
+    '@nuxtjs/auth',
+    // Doc: https://github.com/nuxt-community/dotenv-module
+    "@nuxtjs/dotenv"
   ],
 
   auth: {

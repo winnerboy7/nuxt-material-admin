@@ -6,8 +6,9 @@
         <teacher-form
           :title="title"
           :form.sync="form"
+          :teacherEdu.sync="teacherEdu"
           :readonly="readonly"
-          @updateForm="onSubmit"
+          @insertEdu="onSubmit"
           @handleCheckPersonId="handleCheckPersonId"
         ></teacher-form>
 
@@ -58,15 +59,84 @@ export default {
       action: "",
       actionConfirm: "Start",
 
+      teacherEdu: [],
+
       form: {
+        academicYear: "",
+        semester: "",
+        schoolId: "",
+
         personId: "",
         prefixCode: "",
         firstName: "",
         middleName: "",
         lastName: "",
-        birthdate: "",
+        prefixCodeEn: "",
+        firstNameEn: "",
+        middleNameEn: "",
+        lastNameEn: "",
+
         genderCode: "",
+        birthdate: "",
+
+        startDate: "",
+        beginDate: "",
+        retireDate: "",
+        proCurrentDate: "",
+        currentDepartmentDate: "",
+
+        telNumber: "",
+        emailAddress: "",
+        marryStatus: "",
+        marry: "",
+
+        personBlood: "",
+        personStatus: "",
+
+        schoolName2: "",
+        schoolName3: "",
+        assistanceDateStart: "",
+        assistanceDateEnd: "",
+        assistanceCommand: "",  
+
+        addPosition: "",
+        department: "",
+        addDateDuty: "",
+        addCommand: "",
+        addComment: "",
+       
         nationalityCode: "",
+        personTypeCode: "",
+        positionCode: "",
+
+        academicStandingCode: "",
+        dateAcademics: "",
+        academicsSubject: "",
+
+        teachAcademicLevelCode: "",
+        teachSubjectCode: "",
+        groupSubjectCode: "",
+        
+        teacherQualificationCode: "",
+        teacherCertificateCode: "",
+
+        licenseCertificate: "",
+        licenseNumber: "",    
+        licenseRenew: "",
+        licenseStartDate: "",
+        licenseExpiredDate: "",
+        licenseCancel: "",
+
+        addHouseId: "",
+        addHouseNumber: "",
+        addVillageNumber: "",
+        addStreet: "",
+        addSoi: "",
+        addTrok: "",
+        addSubdistrictCode: "",
+        // addDistrict: "",
+        // addProvince: "",
+
         currentHouseId: "",
         currentHouseNumber: "",
         currentVillageNumber: "",
@@ -75,27 +145,57 @@ export default {
         currentStreet: "",
         currentSubdistrictCode: "",
 
-        academicYear: "",
-        semester: "",
-        schoolId: "",
+        // currentDistrict: "",
+        // currentProvince: "",
+
         passportNumber: "",
         passportStartDate: "",
         passportEndDate: "",
-        personTypeCode: "",
-        positionCode: "",
-        academicStandingCode: "",
-        teachAcademicLevelCode: "",
-        teachSubjectCode: "",
-        teacherQualificationCode: "",
-        teacherCertificateCode: "",
-        licenseNumber: "",
-        licenseExpiredDate: "",
+                
+        cgdNumber: "",
+        positionNumber: "",
+        positionStatus: "",
+        budgetYear: "",  
+        // positionCode: "",
+        // positionName: "",
+        positionCategoryCode: "",
+        positionCategoryTitle: "",
+        // personType: "",
+        
+        currentPosition: "",
+        currentOrderLevel: "",
+        currentSalary: "",
+        currentSalaryRef: "",
+        currentSalaryExtend: "",
+
+        oriPosition: "",
+        oriOrderLevel: "",
+        oriSalary: "",
+        oriSalaryRef: "",
+        oriSalaryExtend: "",
+
+        salaryAcademic: "",
+        salaryCompensation: "",
+        salaryEmoluments: "",
+        
+        gpfStatus: "",
+        gpfDate: "",
+        gpfCollect: "",
+        gpfCollectPercent: "",
+        gpfCollectDate: "",
+        gpfCollectDateAdd: "",
+        gpfCollectStatus: "",
+        gpfCollectPercent: "",
+        
         updateDate: "",
         foreignCode: "",
         statusIdcard: "",
         id: "",
-        district_id: "",
-        province_id: "",
+
+        addDistrictID: "",
+        addProvinceID: "",
+        currentDistrictID: "",
+        currentProvinceID: "",
       },
 
       dialogMsg: {
@@ -180,6 +280,12 @@ export default {
           }
         );
       }
+    },
+
+    onUpdate() {
+      console.log(`Emit OnUpdate`)
+      // this.getTeacherEdu();
+      this.closeInfo();
     },
     
     //จัดรูปแบบวันที่ให้เป็น 1990-09-18 จาก 19900918 (YYYYMMDD)

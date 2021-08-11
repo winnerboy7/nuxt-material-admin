@@ -10,6 +10,8 @@ class UploadFilesService {
     formData.append("cgdFile", file);
     const api_url = process.env.API_URL + "/api/uploads/upload";
     //console.log("POST : " + file.name)
+    console.log(api_url);
+    
     return axios.post(api_url, formData, {
       headers: authHeaderFile(),
       onUploadProgress

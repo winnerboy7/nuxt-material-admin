@@ -20,11 +20,11 @@ class PersonelController extends HttpRequest {
   getByArea(areaCode) {
     return this.fetch(`/api/personels/`, areaCode)
   }
-  insert (teacher) {
-    return this.create(`/api/personels/`, teacher)
+  insert (personel) {
+    return this.create(`/api/personels/`, personel)
   }
-  update (teacher) {
-    return this.update(`/api/personels/${teacher.personId}`, teacher)
+  update (personel) {
+    return this.update(`/api/personels/${personel.personId}`, personel)
   }
   delete (id) {
     return this.delete(`/api/personels/${id}`, id)

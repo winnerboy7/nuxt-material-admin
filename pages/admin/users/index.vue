@@ -6,6 +6,8 @@
           <v-toolbar color="primary darken-1" dark flat dense cad>
             <v-toolbar-title class="subheading"><v-icon>mdi-tag</v-icon>{{ title }}</v-toolbar-title>
             <v-spacer></v-spacer>
+
+            <!-- <v-btn text icon @click="genAreaUser()">User</v-btn> -->
             
             <v-dialog
               v-model="dialog"
@@ -621,31 +623,40 @@ export default {
       //console.log(this.selected);
     },
 
-    genAreaUser(button) {
-      let payload = {
-        name: "",
-        username: "",
-        password: null,
-        email: "",
-        areaCode: "",
-        level: "",
-        role: "",
-      };
-      /*
-        for (let key in this.optionsAreas) {
-            payload.name = this.optionsAreas[key].areaName;
-            payload.username = this.optionsAreas[key].areaId;
-            payload.password = this.optionsAreas[key].areaId;
-            payload.email = null;
-            payload.areaCode = this.optionsAreas[key].areaId;
-            payload.level = "ผู้ดูแลระบบ " + this.optionsAreas[key].areaName;
-            payload.role = "Area";
-            console.log(payload);
-        }
-        */
+    genAreaUser() {
+      // let payload = {
+      //   name: "",
+      //   username: "",
+      //   password: null,
+      //   email: "",
+      //   areaCode: "",
+      //   level: "",
+      //   role: "",
+      // };
+      
+      // for (let key in this.optionsAreas) {
+      //   let payload;
+      //   payload.name = this.optionsAreas[key].areaName;
+      //   payload.username = this.optionsAreas[key].areaId;
+      //   payload.password = this.optionsAreas[key].areaId;
+      //   payload.email = null;
+      //   payload.areaCode = this.optionsAreas[key].areaId;
+      //   payload.level = "ผู้ดูแลระบบ " + this.optionsAreas[key].areaName;
+      //   payload.role = "Area";
+      //   console.log(payload);
+      // }
 
       this.optionsAreas.forEach(function (area, index) {
-        //console.log(area);
+        // console.log(area);
+        let payload = {
+          name: "",
+          username: "",
+          password: null,
+          email: "",
+          areaCode: "",
+          level: "",
+          role: "",
+        };
         payload.name = area.areaName;
         payload.username = area.areaId;
         payload.password = area.areaId;
@@ -657,6 +668,9 @@ export default {
         userService.insert(payload);
         console.log(payload);
       });
+
+      this.getUsers();
+
       this.action = "genUser";
       let d = new Date().getTime();
       this.actionConfirm = this.action + d;

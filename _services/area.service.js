@@ -12,10 +12,13 @@ export const areaService = {
   delete: _delete
 };
 
-function countArea() {
+function countArea(orgType) {
   const requestOptions = {
     method: "GET",
-    headers: authHeader()
+    headers: authHeader(),
+    params: {
+      orgType
+    }
   };
 
   return new Promise((resolve, reject) => {

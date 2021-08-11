@@ -35,7 +35,7 @@ import PersonelForm from '@/forms/personelForm'
 export default {
   layout: "area",
   middleware: "authorize-area",  
-  name: "EditPersonel",
+  name: "AddPersonel",
 
   components: {
     Dialog,
@@ -45,16 +45,16 @@ export default {
   asyncData({ params }) {
     // called every time before loading the component
     return {
-      personId: params.id
+      areaCode: params.areaCode
     };
   },
 
   data() {
     return {
       //ตัวแปรที่ใช้งาน
-      title: "แก้ไขข้อมูลบุคลากรใน สพท.",
+      title: "เพิ่มข้อมูลบุคลากรในสำนักงานเขตพื้นที่การศึกษา",
       personel: [],
-      readonly: true,      
+      readonly: false,
       action: "",
       actionConfirm: "Start",
 
@@ -75,22 +75,21 @@ export default {
         currentStreet: "",
         currentSubdistrictCode: "",
 
-        academicYear: "",
+        academicYear: new Date().getFullYear() + 543,
         semester: "",
-        schoolId: "",
+        areaCode: "",
         passportNumber: "",
         passportStartDate: "",
         passportEndDate: "",
-        personTypeCode: "",
-        positionCode: "",
-        academicStandingCode: "",
+        personTypeCode: "10",
+        positionCode: "10000",
+        academicStandingCode: "99",
         personelQualificationCode: "",
         personelCertificateCode: "",
         updateDate: "",
         foreignCode: "",
         statusIdcard: "",
         id: "",
-
         district_id: "",
         province_id: "",
       },
@@ -110,94 +109,71 @@ export default {
     }),  
   },
 
-  mounted() {},
-
-  watch: {
-    actionConfirm: function() {
-      this.getPersonel();
-    },
+  mounted() {
+    console.log("MOUNTED PERSONEL");    
+    if (this.areaCode) {
+      this.form.areaCode = this.areaCode;
+      console.log(`areaCode : ${this.areaCode}`)
+    }    
   },
+
+  watch: {},
   
   created() {
-    console.log("PERSONEL");
-    this.getPersonel();  
+    console.log("CREATED PERSONEL");
+    //this.getPersonel();
     this.setAcademicYear();
     this.setSemester();
+    this.form.academicYear = this.systemConfig.academicYear;
+    this.form.semester = this.systemConfig.semester;
+    // console.log(this.form)
   },
 
-  methods: {    
+  methods: {
     // ดึงข้อมูลคอนฟิกระบบ
     ...mapActions("config", ["setAcademicYear", "setSemester"]),
 
-    // ดึงข้อมูลครู
-    async getPersonel() {
-      console.log("GET PERSONEL");
-      try {
-        await personelService.getById(this.personId).then(response => {
-          [this.personel] = response;
-          this.title =`แก้ไขข้อมูล ${this.personel.prefixName.title}${this.personel.firstName}  ${this.personel.lastName}`;
-        });
-
-        for (let key in this.form) {
-          this.form[key] = this.personel[key];
-        }
-        this.form.province_id = this.personel.subdistrictName.province_id;
-        this.form.district_id = this.personel.subdistrictName.district_id;
-        
-        this.form.academicYear = this.systemConfig.academicYear;
-        this.form.semester = this.systemConfig.semester;
-
-        this.form.birthdate = this.formatDate(this.form.birthdate);
-        this.form.passportStartDate = this.formatDate(this.form.passportStartDate);
-        this.form.passportEndDate = this.formatDate(this.form.passportEndDate);
-        // this.form.licenseExpiredDate = this.formatDate(this.form.licenseExpiredDate);
-        this.form.updateDate = moment().format("YYYYMMDD");
-      } catch (error) {
-        console.log(error);
-      }
-    },
-
     //บันทึกข้อมูล
     onSubmit() {
-      console.log("Updated");
-      var personelForm = this.form;
+     console.log("ADDED PERSONEL");
+      if (this.handleCheckPersonId()) {
+        this.form.birthdate = moment(this.form.birthdate).format("YYYYMMDD");
+        this.form.passportStartDate = this.form.passportStartDate.length > 0
+            ? moment(this.form.passportStartDate).format("YYYYMMDD")
+            : "00000000";
+        this.form.passportEndDate = this.form.passportEndDate.length > 0
+            ? moment(this.form.passportEndDate).format("YYYYMMDD")
+            : "00000000";
+            
+        this.form.updateDate = moment().format("YYYYMMDD");
+        let d = new Date().getTime();
+        this.actionConfirm = this.action + d;
+        this.action = "update";
 
-      personelForm.birthdate = moment(personelForm.birthdate).format("YYYYMMDD");
-      personelForm.passportStartDate = personelForm.passportStartDate.length > 0
-          ? moment(personelForm.passportStartDate).format("YYYYMMDD")
-          : "00000000";
-      personelForm.passportEndDate = personelForm.passportEndDate.length > 0
-          ? moment(personelForm.passportEndDate).format("YYYYMMDD")
-          : "00000000";
-      
-      personelForm.updateDate = moment().format("YYYYMMDD");
-      let d = new Date().getTime();
-      this.actionConfirm = this.action + d;
-      this.action = "update";
+        // console.log(this.form)
 
-      // console.log(this.form)
-
-      personelService.update(personelForm).then(
-        (response) => {
-          this.dialogMsg = {
-            title: "เยี่ยมมาก",
-            message: "แก้ไขข้อมูลสำเร็จ",
-            type: "primary",
-            show: true,
-          };
-          // swal("เยี่ยมมาก", "แก้ไขข้อมูลสำเร็จ", "success");
-        },
-        (error) => {
-          console.log(error);
-          this.dialogMsg = {
-            title: "แจ้งเตือน !",
-            message: "เกิดข้อผิดพลาด",
-            type: "error",
-            show: true,
-          };
-          // swal("เกิดข้อผิดพลาด!", "", "error");
-        }
-      );
+        personelService.insert(this.form).then(
+          (response) => {
+            this.dialogMsg = {
+              title: "เยี่ยมมาก",
+              message: "บันทึกข้อมูลสำเร็จ",
+              type: "primary",
+              show: true,
+            };
+            // swal("เยี่ยมมาก", "แก้ไขข้อมูลสำเร็จ", "success");
+          },
+          (error) => {
+            console.log(error);
+            this.dialogMsg = {
+              title: "แจ้งเตือน !",
+              message: "เกิดข้อผิดพลาด",
+              type: "error",
+              show: true,
+            };
+            // swal("เกิดข้อผิดพลาด!", "", "error");
+          }
+        );
+      }
     },
     
     //จัดรูปแบบวันที่ให้เป็น 1990-09-18 จาก 19900918 (YYYYMMDD)
@@ -221,7 +197,7 @@ export default {
         show: false,
       };
     },
-
+    
     //ตรวจสอบเลขประจำตัวประชาชน
     handleCheckPersonId() {
       let value = this.form.personId;

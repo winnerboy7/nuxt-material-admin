@@ -4,7 +4,7 @@
       <v-app id="inspire" class="app">
         <app-drawer class="app--drawer"></app-drawer>
         <app-toolbar class="app--toolbar"></app-toolbar>
-        <v-content>
+        <v-main>
           <!-- Page Header -->
           <page-header></page-header>
           <div class="page-wrapper">
@@ -17,11 +17,11 @@
             <span class="caption mr-1"> Chaimongkol studio. API Version : {{version}}</span>
             <v-icon color="pink" small>favorite</v-icon>
           </v-footer>
-        </v-content>
+        </v-main>
         <!-- Go to top -->
         <app-fab></app-fab>
         <!-- theme setting -->
-        <v-btn small fab dark falt fixed top="top" right="right" class="setting-fab" color="red"
+        <v-btn small fab dark text fixed top="top" right="right" class="setting-fab" color="red"
                @click="openThemeSettings">
           <v-icon>settings</v-icon>
         </v-btn>
@@ -47,7 +47,7 @@
       v-model="snackbar.show"
     >
       {{ snackbar.text }}
-      <v-btn dark flat @click.native="snackbar.show = false" icon>
+      <v-btn dark text @click.native="snackbar.show = false" icon>
         <v-icon>close</v-icon>
       </v-btn>
     </v-snackbar>

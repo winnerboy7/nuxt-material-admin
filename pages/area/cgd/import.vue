@@ -35,7 +35,8 @@
                         ><v-icon>mdi-tag</v-icon>
                         ข้อมูลบุคลากรในสังกัด</v-toolbar-title
                       >
-                    </v-toolbar>
+                    </v-toolbar>                    
+
                     <v-tabs vertical>
                       <v-tab>
                         <v-icon left>
@@ -228,129 +229,19 @@
               </v-card>
             </v-dialog>
 
-            <Dialog
-              :title="dialogMsg.title"
-              :message="dialogMsg.message"
-              :type="dialogMsg.type"
-              :show="dialogMsg.show"
-              @onOk="onOk"
-            ></Dialog>
-
             <v-chip class="ma-2" color="pink" text-color="white">
-              <!-- {{ items.length }} -->
+              {{ items.length }}
             </v-chip>
           </v-toolbar>
 
           <v-divider></v-divider>
-          <ValidationObserver ref="observer" v-slot="{ handleSubmit }">
-            <v-form ref="form" @keyup.native.enter="handleSubmit(handleSearch)">
-              <v-container fluid>
-                <v-row>
-                  <v-col cols="4">
-                    <ValidationProvider
-                      name="ค้นหา"
-                      v-slot="{ errors }"
-                      rules="required"
-                    >
-                      <v-text-field
-                        v-model="filter"
-                        append-icon="mdi-magnify"
-                        :error-messages="errors"
-                        label="ค้นหา"
-                        single-line
-                        hide-details
-                      ></v-text-field>
-                    </ValidationProvider>
-                  </v-col>
-                  <v-col cols="2">
-                    <v-btn
-                      color="primary"
-                      class="mr-4"
-                      @click="handleSubmit(handleSearch)"
-                    >
-                      ค้นหา
-                    </v-btn>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-form>
-          </ValidationObserver>
-
-          <v-data-table
-            v-model="selected"
-            :headers="fieldsData"
-            :items="items"
-            :search="search"
-            :items-per-page="10"
-            :footer-props="{
-              'items-per-page-options': [10, 20, 50, 100, -1],
-              showFirstLastPage: true,
-              firstIcon: 'mdi-arrow-collapse-left',
-              lastIcon: 'mdi-arrow-collapse-right',
-              prevIcon: 'mdi-minus',
-              nextIcon: 'mdi-plus'
-            }"
-            item-key="id"
-            sort-by="id"
-            class="elevation-1"
-            show-select
-          >
-            <template v-slot:top>
-              <v-toolbar flat>
-                <v-toolbar-title>{{ title }}</v-toolbar-title>
-                <v-divider class="mx-4" inset vertical></v-divider>
-                <v-spacer></v-spacer>
-                <v-text-field
-                  v-model="search"
-                  append-icon="mdi-magnify"
-                  label="ค้นหา"
-                  single-line
-                  hide-details
-                ></v-text-field>
-              </v-toolbar>
-            </template>
-            <template v-slot:[`item.personId`]="{ item }">
-              <div @click="showItem(item)">{{ item.personId }}</div>
-            </template>
-            <template v-slot:[`item.fullname`]="{ item }">
-              <div @click="showItem(item)">{{ item.fullname }}</div>
-            </template>
-            <template v-slot:[`item.actions`]="{ item }">
-              <v-tooltip top>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-icon
-                    v-bind="attrs"
-                    v-on="on"
-                    small
-                    @click="editItem(item)"
-                  >
-                    mdi-pencil
-                  </v-icon>
-                </template>
-                <span>แก้ไขข้อมูล</span>
-              </v-tooltip>
-              <v-tooltip top>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-icon
-                    v-bind="attrs"
-                    v-on="on"
-                    small
-                    @click="deleteItem(item)"
-                  >
-                    mdi-delete
-                  </v-icon>
-                </template>
-                <span>ลบข้อมูล</span>
-              </v-tooltip>
-            </template>
-            <template v-slot:no-data>
-              <v-btn color="primary" @click="initialize">
-                Reset
-              </v-btn>
-            </template>
-          </v-data-table>
+          
+          <upload-files @load-items="handleLoadItems"></upload-files>
+          
+          <person-data-table :items="items" :infoSelected="infoSelected" v-if="items.length"></person-data-table>
 
           <!-- <pre>{{ selected }}</pre> -->
+          <pre>{{ items }}</pre>
         </v-card>
 
         <Dialog
@@ -362,137 +253,7 @@
         ></Dialog>
 
         <!-- Main content -->
-        <section class="content">
-          <div class="container-fluid">
-            <!-- Main row -->
-            <div class="row">
-              <!-- Left col -->
-              <section class="col-lg-12 connectedSortable">
-                <!-- Content -->
-                <div class="card card-primary color-palette-box">
-                  <div class="card-header">
-                    <h3 class="card-title">{{ title }}</h3>
-                  </div>
-                  <!-- /.card-header -->
-                  <div class="card-body">
-                    <template>
-                      <div>
-                        <b-form-group
-                          label="เลือกประเภทบุคคล:"
-                          label-for="file-personTypes"
-                          label-cols-sm="2"
-                        >
-                          <b-form-radio-group
-                            id="input-personInfos"
-                            v-model="typeSelected"
-                            :options="personTypes"
-                            class="mb-3"
-                            value-field="item"
-                            text-field="name"
-                            disabled-field="notEnabled"
-                          ></b-form-radio-group>
-                          <!-- <div class="mt-3">ประเภทบุคคล: <strong>{{ typeSelected }}</strong></div> -->
-                        </b-form-group>
-                      </div>
-                    </template>
-
-                    <template>
-                      <div>
-                        <b-form-group
-                          label="เลือกประเภทข้อมูล:"
-                          label-for="file-personInfos"
-                          label-cols-sm="2"
-                        >
-                          <b-form-select
-                            id="input-personInfos"
-                            v-model="infoSelected"
-                            :options="personInfos"
-                            class="mb-3"
-                            value-field="item"
-                            text-field="name"
-                            disabled-field="notEnabled"
-                          ></b-form-select>
-                          <!-- <div class="mt-3">ข้อมูล: <strong>{{ infoSelected }}</strong></div> -->
-                        </b-form-group>
-                      </div>
-                    </template>
-
-                    <template>
-                      <div v-if="currentFile" class="progress">
-                        <div
-                          class="progress-bar progress-bar-info progress-bar-striped"
-                          role="progressbar"
-                          :aria-valuenow="progress"
-                          aria-valuemin="0"
-                          aria-valuemax="100"
-                          :style="{ width: progress + '%' }"
-                        >
-                          {{ progress }}%
-                        </div>
-                      </div>
-
-                      <div>
-                        <b-form-group
-                          label="เลือกไฟล์:"
-                          label-for="file-input"
-                          label-cols-sm="2"
-                        >
-                          <b-form-file
-                            v-model="cgdFile"
-                            accept=".txt"
-                            ref="file"
-                            id="file-input"
-                            class="mb-2"
-                            placeholder="เลือกไฟล์ หรือลากไฟล์มาวางที่นี่..."
-                            drop-placeholder="ลากไฟล์มาวางที่นี่..."
-                            @change="handleFileUpload()"
-                          ></b-form-file>
-                        </b-form-group>
-
-                        <b-button :disabled="!cgdFile" @click="submitFile()"
-                          >ตกลง</b-button
-                        >
-
-                        <p class="mt-2">
-                          ไฟล์: <b>{{ cgdFile ? cgdFile.name : "" }}</b> :
-                          <i>{{ message }}</i>
-                        </p>
-                      </div>
-
-                      <!-- <div class="alert alert-light" role="alert">{{ message }}</div> -->
-
-                      <!-- <PersonDataTable :items="items" :infoSelected="infoSelected" v-if="items.length"></PersonDataTable> -->
-
-                      <!-- <pre>{{ content }}</pre> -->
-                      <b-card
-                        border-variant="primary"
-                        header="รายการไฟล์ที่อัพโหลด"
-                        header-bg-variant="primary"
-                        header-text-variant="white"
-                        align="left"
-                      >
-                        <b-card-text>
-                          <ol>
-                            <li v-for="(file, index) in fileInfos" :key="index">
-                              <a :href="file.url">{{ file.name }}</a>
-                            </li>
-                          </ol>
-                        </b-card-text>
-                      </b-card>
-                    </template>
-                  </div>
-                  <!-- /.card-body -->
-                  <div class="card-footer"></div>
-                  <!-- /.card-footer-->
-                </div>
-                <!-- /.card -->
-              </section>
-              <!-- /.Left col -->
-            </div>
-            <!-- /.row (main row) -->
-          </div>
-          <!-- /.container-fluid -->
-        </section>
+        
       </v-flex>
     </v-layout>
   </v-container>
@@ -505,6 +266,9 @@ import UploadService from "@/_services/upload.service";
 import { schoolService } from "@/_services/school.service";
 import Dialog from "@/components/Dialog";
 import * as axios from "axios";
+
+import UploadFiles from "@/components/UploadFiles";
+import PersonDataTable from "@/components/PersonDataTable";
 
 import {
   ValidationObserver,
@@ -523,7 +287,9 @@ export default {
   components: {
     ValidationObserver,
     ValidationProvider,
-    Dialog
+    Dialog,
+    UploadFiles,
+    PersonDataTable,
   },
 
   data() {
@@ -534,149 +300,8 @@ export default {
       dialogInfo: false,
 
       items: [],
-      cgdFile: null,
-      personTypes: [
-        { item: 42, name: "ครูและบุคลากรทางการศึกษา" },
-        { item: 43, name: "ผู้บริหาร สพท./สถานศึกษา" },
-        { item: 45, name: "บุคลากรในสำนักงานเขตพื้นที่การศึกษา" },
-        { item: 46, name: "ลูกจ้าง" }
-      ],
       typeSelected: 42,
-      personInfos: [
-        { item: 1, name: "ข้อมูลทั่วไป" },
-        { item: 2, name: "บุคคล" },
-        { item: 3, name: "การศึกษา" },
-        { item: 4, name: "ครอบครัว" },
-        { item: 5, name: "ที่อยู่" }
-      ],
       infoSelected: 1,
-
-      selectedFiles: undefined,
-      currentFile: undefined,
-      progress: 0,
-      message: "",
-      content: {},
-      fileInfos: [],
-
-      fieldsData: [
-        { key: "id", label: "ลำดับ", sortable: true },
-        // { key: "ministryCode", label: "รหัสกระทรวง", sortable: true, class: "text-center" },
-        // { key: "ministryName", label: "ชื่อหน่วยงานระดับกระทรวง", sortable: true, },
-        // { key: "belongCode", label: "รหัสกรม", sortable: true, class: "text-center" },
-        // { key: "belongName", label: "ชื่อหน่วยงานระดับกรม", sortable: true, },
-        // { key: "areaTypeCode", label: "รหัสสก./สภ.", sortable: true, class: "text-center" },
-        // { key: "areaTypeName", label: "ชื่อหน่วยงานระดับสก./สภ.", sortable: true, },
-        // { key: "areaCode", label: "รหัสสำนัก/กอง", sortable: true, class: "text-center" },
-        // { key: "areaName", label: "ชื่อหน่วยงานระดับสำนัก/กอง", sortable: true, },
-        // { key: "schoolId", label: "รหัสโรงเรียน", sortable: true, class: "text-center" },
-        { key: "schoolName", label: "โรงเรียน", sortable: true },
-        // { key: "budgetYear", label: "ปีงบประมาณ", sortable: true, class: "text-center" },
-        {
-          key: "positionNumber",
-          label: "เลขที่ประจำตำแหน่ง",
-          sortable: true,
-          class: "text-center"
-        },
-        {
-          key: "personId",
-          label: "เลขประจำตัวประชาชน",
-          sortable: true,
-          class: "text-center"
-        },
-        // { key: "prefixCode", label: "รหัสคำนำหน้าชื่อ", sortable: true, class: "text-center" },
-        { key: "fullname", label: "ชื่อ-สกุล", sortable: true },
-        // { key: "prefixTitle", label: "คำนำหน้าชื่อ", sortable: true, },
-        // { key: "firstName", label: "ชื่อ", sortable: true, },
-        // { key: "lastName", label: "นามสกุล", sortable: true, },
-        // { key: "positionCode", label: "รหัสตำแหน่งในสายงาน", sortable: true, class: "text-center" },
-        { key: "positionName", label: "ตำแหน่ง", sortable: true },
-        // { key: "positionCategoryCode", label: "รหัสสายบริหาร", sortable: true, class: "text-center" },
-        { key: "positionCategoryTitle", label: "วิทยฐานะ", sortable: true },
-        // { key: "personType", label: "รหัสประเภทสังกัด", sortable: true, class: "text-center" },
-        // { key: "oriPosition", label: "อันดับเดิม", sortable: true, class: "text-center" },
-        // { key: "oriOrderLevel", label: "ขั้นเดิม", sortable: true, class: "text-center" },
-        // { key: "oriSalary", label: "เงินเดือนเดิม", sortable: true, class: "text-center" },
-        // { key: "oriSalaryRef", label: "เงินอาศัยเบิกเดิม", sortable: true, class: "text-center" },
-        // { key: "oriSalaryExtend", label: "เงินประจำวิทยฐานะเดิมลำดับที่1", sortable: true, class: "text-center" },
-        {
-          key: "currentPosition",
-          label: "อันดับ",
-          sortable: true,
-          class: "text-center"
-        },
-        // { key: "currentOrderLevel", label: "ขั้น", sortable: true, class: "text-center" },
-        {
-          key: "currentSalary",
-          label: "เงินเดือน",
-          sortable: true,
-          class: "text-center"
-        },
-        // { key: "currentSalaryRef", label: "เงินอาศัยเบิก", sortable: true, class: "text-center" },
-        {
-          key: "currentSalaryExtend",
-          label: "เงินประจำวิทยฐานะลำดับที่1",
-          sortable: true,
-          class: "text-center"
-        }
-        // { key: "provinceName", label: "ชื่อรหัสจังหวัด", sortable: true, class: "text-center" },
-        // { key: "teacherType", label: "รหัสประเภทข้าราชการ", sortable: true, class: "text-center" },
-      ],
-
-      fieldsInfo: [
-        { key: "id", label: "ลำดับ", sortable: true },
-        {
-          key: "personId",
-          label: "เลขประจำตัวประชาชน",
-          sortable: true,
-          class: "text-center"
-        },
-        // { key: "prefixCode", label: "รหัสคำนำหน้าชื่อ", sortable: true, class: "text-center" },
-        { key: "fullname", label: "ชื่อ-สกุล", sortable: true },
-        // { key: "prefixTitle", label: "คำนำหน้าชื่อ", sortable: true, },
-        // { key: "firstName", label: "ชื่อ", sortable: true, },
-        // { key: "lastName", label: "นามสกุล", sortable: true, },
-        {
-          key: "birthDate",
-          label: "วันเดือนปีเกิด",
-          sortable: true,
-          class: "text-center"
-        },
-        {
-          key: "startCommandDate",
-          label: "วันสั่งบรรจุ",
-          sortable: true,
-          class: "text-center"
-        },
-        {
-          key: "startWorkingDate",
-          label: "วันเริ่มปฏิบัติราชการ",
-          sortable: true,
-          class: "text-center"
-        },
-        {
-          key: "gpfStatus",
-          label: "การเป็นสมาชิก กบข.",
-          sortable: true,
-          class: "text-center"
-        },
-        {
-          key: "gpfDate",
-          label: "วันเข้าเป็นสมาชิก",
-          sortable: true,
-          class: "text-center"
-        },
-        {
-          key: "gpfCollect",
-          label: "การสะสม",
-          sortable: true,
-          class: "text-center"
-        }
-        // { key: "gpfCollectPercent", label: "จำนวน % อัตราการสะสม", sortable: true, class: "text-center" },
-        // { key: "gpfCollectDate", label: "วันสะสมเข้าเป็นสมาชิก กบข.", sortable: true, class: "text-center" },
-        // { key: "gpfCollectDateAdd", label: "วันสะสมส่วนเพิ่ม", sortable: true, class: "text-center" },
-        // { key: "gpfCollectStatus", label: "การสะสมส่วนเพิ่ม", sortable: true, class: "text-center" },
-        // { key: "gpfCollectPercent", label: "จำนวน % อัตราการการสะสมส่วนเพิ่ม", sortable: true, class: "text-center" },
-      ],
 
       dialogMsg: {
         title: "",
@@ -697,41 +322,10 @@ export default {
   },
 
   methods: {
-    submitFile() {
-      this.progress = 0;
-      // console.log(this.cgdFile)
-      this.currentFile = this.cgdFile;
-      const formInfo = {
-        areaCode: this.user.areaCode,
-        personType: this.typeSelected,
-        personInfo: this.infoSelected
-      };
+    initialize () {},
 
-      UploadService.upload(this.currentFile, formInfo, event => {
-        this.progress = Math.round((100 * event.loaded) / event.total);
-      })
-        .then(response => {
-          this.message = response.data.message;
-          this.content = response.data.data.content;
-          this.items = response.data.data.content;
-
-          return UploadService.getFiles(this.user.areaCode);
-        })
-        .then(files => {
-          this.fileInfos = files.data;
-        })
-        .catch(() => {
-          this.progress = 0;
-          this.message = "Could not upload the file!";
-          this.currentFile = undefined;
-        });
-
-      this.file = undefined;
-    },
-
-    handleFileUpload(event) {
-      this.cgdFile = this.$refs.file.files;
-      // console.log(this.$refs.file)
+    handleLoadItems(items) {
+      this.items = items;
     },
 
     //รีโหลดหน้าก่อนนี้
@@ -758,10 +352,6 @@ export default {
   },
 
   mounted() {
-    UploadService.getFiles(this.user.areaCode).then(response => {
-      this.fileInfos = response.data;
-    });
-
     // Install VeeValidate rules and localization
     Object.keys(rules).forEach(rule => {
       extend(rule, rules[rule]);

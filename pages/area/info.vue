@@ -25,7 +25,10 @@
               </v-tab>
 
               <v-tab-item>
-                <v-card flat>
+                <v-card class="elevation-3">
+                  <v-toolbar dark dense color="primary">
+                    <v-toolbar-title>รายละเอียด</v-toolbar-title>
+                  </v-toolbar>
                   <v-card-text>
                     <v-list dense>
                       <v-list-item>
@@ -97,7 +100,10 @@
               </v-tab-item>
 
               <v-tab-item>
-                <v-card flat>
+                <v-card class="elevation-3">
+                  <v-toolbar dark dense color="primary">
+                    <v-toolbar-title>ข้อมูลทั่วไป</v-toolbar-title>
+                  </v-toolbar>
                   <v-card-text>
                     <v-list dense>
                       <v-list-item>

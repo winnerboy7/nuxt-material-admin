@@ -8,10 +8,14 @@ export const teacherService = {
   getBySchoolId,
   getByName,
   getTeachers,
-  getByArea,
+  getByArea, 
   insert,
   update,
-  delete: _delete
+  delete: _delete,
+  getTeacherEdu,
+  insertTeacherEdu,
+  updateTeacherEdu,
+  deleteTeacherEdu,
 };
 
 function countTeacher(areaCode, personTypeCode) {
@@ -183,6 +187,70 @@ function _delete(id) {
   return new Promise((resolve, reject) => {
     axios
       .delete(`/api/teachers/${id}`, {
+        headers: authHeader()
+      })
+      .then(response => {
+        // console.log(response.data)
+        resolve(response.data);
+      })
+      .catch(error => {
+        reject(handleError(error));
+      });
+  });
+}
+
+function getTeacherEdu(personId) {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`/api/teachers/edu/${personId}`, {
+        headers: authHeader()
+      })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(error => {
+        reject(handleError(error));
+      });
+  });
+}
+
+function insertTeacherEdu(teacher) {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(`/api/teachers/edu`, teacher, {
+        headers: authHeader()
+      })
+      .then(response => {
+        // console.log(response.data)
+        resolve(response.data);
+      })
+      .catch(error => {
+        reject(handleError(error));
+      });
+  });
+}
+
+function updateTeacherEdu(teacher) {
+  return new Promise((resolve, reject) => {
+    axios
+      .put(`/api/teachers/edu/${teacher._id}`, teacher, {
+        headers: authHeader()
+      })
+      .then(response => {
+        // console.log(response.data)
+        resolve(response.data);
+      })
+      .catch(error => {
+        reject(handleError(error));
+      });
+  });
+}
+
+// prefixed function name with underscore because delete is a reserved word in javascript
+function deleteTeacherEdu(id) {
+  return new Promise((resolve, reject) => {
+    axios
+      .delete(`/api/teachers/edu/${id}`, {
         headers: authHeader()
       })
       .then(response => {

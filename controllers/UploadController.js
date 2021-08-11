@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { authHeader } from '@/middlewares'
+import { authHeader } from "@/middleware/auth-header";
 
 class UploadController {
   upload(file, formInfo, onUploadProgress) {

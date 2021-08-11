@@ -1,61 +1,111 @@
-import HttpRequest from './http_request'
-
+import HttpRequest from "./http_request";
 class StandardCodeController extends HttpRequest {
-  getPrefix () {
-    return this.create('/api/standardcode/prefix/')
+  getPrefix() {
+    return this.create(`/api/standardcode/prefix/`);
   }
 
-  getGender () {
-    return this.fetch('/api/standardcode/gender/')
+  getGender() {
+    return this.fetch(`/api/standardcode/gender/`);
   }
 
-  getNationality () {
-    return this.fetch('/api/standardcode/nationality/')
+  getNationality() {
+    return this.fetch(`/api/standardcode/nationality/`);
   }
 
-  getSubdistrict () {
-    return this.fetch('/api/standardcode/subdistrict/')
+  getSubdistrict() {
+    return this.fetch(`/api/standardcode/subdistrict/`);
   }
 
-  getDistrict () {
-    return this.fetch('/api/standardcode/district/')
+  getDistrict() {
+    return this.fetch(`/api/standardcode/district/`);
   }
 
-  getProvince () {
-    return this.fetch('/api/standardcode/province/')
+  getProvince() {
+    return this.fetch(`/api/standardcode/province/`);
   }
 
-  getPersonTypeCode () {
-    return this.fetch('/api/standardcode/persontype/')
+  getPersonTypeCode() {
+    return this.fetch(`/api/standardcode/persontype/`);
   }
 
-  getPositionCode () {
-    return this.fetch('/api/standardcode/position/')
+  getPositionCode() {
+    return this.fetch(`/api/standardcode/position/`);
+  }
+  getPositionById(id) {
+    return this.fetch(`/api/standardcode/position/${id}`);
   }
 
-  getTeachAcademicLevelCode () {
-    return this.fetch('/api/standardcode/academicLevel/')
+  getPositionStatus() {
+    return this.fetch(`/api/standardcode/positionStatus/`);
   }
 
-  getAcademicStandingCode () {
-    return this.fetch('/api/standardcode/academicStanding/')
+  getAcademicLevelCode() {
+    return this.fetch(`/api/standardcode/academicLevel/`);
   }
 
-  getTeachSubjectCode () {
-    return this.fetch('/api/standardcode/teachSubject/')
+  getEducationLevel() {
+    return this.fetch(`/api/standardcode/educationLevel/`);
   }
 
-  getSchoolType () {
-    return this.fetch('/api/standardcode/schoolType/')
+  getDegree() {
+    return this.fetch(`/api/standardcode/degree/`);
   }
 
-  getSchoolSpecial () {
-    return this.fetch('/api/standardcode/schoolSpecial/')
+  getMajor() {
+    return this.fetch(`/api/standardcode/major/`);
   }
 
-  getSchoolPosition () {
-    return this.fetch('/api/standardcode/schoolPosition/')
+  getMajorProgram() {
+    return this.fetch(`/api/standardcode/majorProgram/`);
+  }
+
+  getAcademicStandingCode() {
+    return this.fetch(`/api/standardcode/academicStanding/`);
+  }
+
+  getOrderLevel() {
+    return this.fetch(`/api/standardcode/orderLevel/`);
+  }
+
+  getOrderLevelById(id) {
+    return this.fetch(`/api/standardcode/orderLevel/${id}`);
+  }
+
+  getTeacherCertificateCode() {
+    return this.fetch(`/api/standardcode/teacherCertificate/`);
+  }
+
+  getTeachSubjectCode() {
+    return this.fetch(`/api/standardcode/teachSubject/`);
+  }
+
+  getGroupSubject() {
+    return this.fetch(`/api/standardcode/groupSubject/`);
+  }
+
+  getGroupSubjectById(id) {
+    return this.fetch(`/api/standardcode/groupSubject/${id}`);
+  }
+
+  getSchoolType() {
+    return this.fetch(`/api/standardcode/schoolType/`);
+  }
+
+  getSchoolSpecial() {
+    return this.fetch(`/api/standardcode/schoolSpecial/`);
+  }
+
+  getSchoolPosition() {
+    return this.fetch(`/api/standardcode/schoolPosition/`);
+  }
+
+  getAddPosition() {
+    return this.fetch(`/api/standardcode/addPosition/`);
+  }
+
+  getDepartment() {
+    return this.fetch(`/api/standardcode/department/`);
   }
 }
 
-export default StandardCodeController
+export default StandardCodeController;

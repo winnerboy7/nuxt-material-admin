@@ -6,10 +6,58 @@
         <teacher-form
           :title="title"
           :form.sync="form"
+          :teacherEdu.sync="teacherEdu"
           :readonly="readonly"
           @updateForm="onSubmit"
+          @insertEdu="insertEdu"
+          @updateEdu="updateEdu"
+          @deleteEdu="deleteEdu"
           @handleCheckPersonId="handleCheckPersonId"
         ></teacher-form>
+
+        <v-dialog
+          v-model="dialogInfo"
+          width="500"
+          hide-overlay
+          scrollable
+        >
+        <education-form
+            :title="formTitle"
+            :formEdu.sync="formEdu"
+            :action.sync="action"
+            @onUpdate="onUpdate"
+            @onInsert="onInsert"
+            @closeInfo="closeInfo"
+          ></education-form>
+        </v-dialog>
+
+        <v-dialog v-model="dialogDelete" max-width="500px">
+          <v-card>
+            <v-toolbar dark color="error">
+              <v-icon large left>mdi-delete</v-icon>
+              <v-toolbar-title>คำเตือน! ยืนยันการลบข้อมูล</v-toolbar-title>
+              <v-spacer></v-spacer>
+            </v-toolbar>
+            <!-- <v-card-title>
+              <v-icon large left>mdi-delete</v-icon>
+              <span class="title font-weight-light">ยืนยันการลบข้อมูล</span>
+            </v-card-title> -->
+            <v-card-text class="headline font-weight-bold mt-3">
+              {{ formTitle }}
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" text @click="closeDelete"
+                >ยกเลิก</v-btn
+              >
+              <v-btn color="blue darken-1" text @click="deleteItemConfirm"
+                >ลบข้อมูล</v-btn
+              >
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
 
         <Dialog
           :title="dialogMsg.title"
@@ -18,6 +66,8 @@
           :show="dialogMsg.show"
           @onOk="onOk"
         ></Dialog>
+
+        <!-- <pre> {{ teacher }} </pre> -->
         
       </v-flex>
     </v-layout>
@@ -31,6 +81,7 @@ import moment from "moment";
 import Dialog from "@/components/Dialog";
 import Swal from "sweetalert2";
 import TeacherForm from '@/forms/teacherForm'
+import EducationForm from '@/forms/educationForm'
 
 export default {
   layout: "area",
@@ -40,6 +91,7 @@ export default {
   components: {
     Dialog,
     TeacherForm,
+    EducationForm,
   },
 
   asyncData({ params }) {
@@ -53,20 +105,86 @@ export default {
     return {
       //ตัวแปรที่ใช้งาน
       title: "แก้ไขข้อมูลครูและบุคลากรทางการศึกษา",
+      formTitle: "",
       teacher: [],
-      readonly: true,
-      action: "",
-      actionConfirm: "Start",
+      readonly: true,    
 
-      form: {
+      form: {        
+        academicYear: "",
+        semester: "",
+        schoolId: "",
+
         personId: "",
         prefixCode: "",
         firstName: "",
         middleName: "",
         lastName: "",
-        birthdate: "",
+        prefixCodeEn: "",
+        firstNameEn: "",
+        middleNameEn: "",
+        lastNameEn: "",
+
         genderCode: "",
+        birthdate: "",
+
+        startDate: "",
+        beginDate: "",
+        retireDate: "",
+        proCurrentDate: "",
+        currentDepartmentDate: "",
+
+        telNumber: "",
+        emailAddress: "",
+        marryStatus: "",
+        marry: "",
+
+        personBlood: "",
+        personStatus: "",
+
+        schoolName2: "",
+        schoolName3: "",
+        assistanceDateStart: "",
+        assistanceDateEnd: "",
+        assistanceCommand: "",  
+
+        addPosition: "",
+        department: "",
+        addDateDuty: "",
+        addCommand: "",
+        addComment: "",
+       
         nationalityCode: "",
+        personTypeCode: "",
+        positionCode: "",
+
+        academicStandingCode: "",
+        dateAcademics: "",
+        academicsSubject: "",
+
+        teachAcademicLevelCode: "",
+        teachSubjectCode: "",
+        groupSubjectCode: "",
+        
+        teacherQualificationCode: "",
+        teacherCertificateCode: "",
+
+        licenseCertificate: "",
+        licenseNumber: "",    
+        licenseRenew: "",
+        licenseStartDate: "",
+        licenseExpiredDate: "",
+        licenseCancel: "",
+
+        addHouseId: "",
+        addHouseNumber: "",
+        addVillageNumber: "",
+        addStreet: "",
+        addSoi: "",
+        addTrok: "",
+        addSubdistrictCode: "",
+        // addDistrict: "",
+        // addProvince: "",
+
         currentHouseId: "",
         currentHouseNumber: "",
         currentVillageNumber: "",
@@ -75,30 +193,97 @@ export default {
         currentStreet: "",
         currentSubdistrictCode: "",
 
-        academicYear: "",
-        semester: "",
-        schoolId: "",
+        // currentDistrict: "",
+        // currentProvince: "",
+
         passportNumber: "",
         passportStartDate: "",
         passportEndDate: "",
-        personTypeCode: "",
-        positionCode: "",
-        academicStandingCode: "",
-        teachAcademicLevelCode: "",
-        teachSubjectCode: "",
-        teacherQualificationCode: "",
-        teacherCertificateCode: "",
-        licenseNumber: "",
-        licenseExpiredDate: "",
+                
+        cgdNumber: "",
+        positionNumber: "",
+        positionStatus: "",
+        budgetYear: "",  
+        // positionCode: "",
+        // positionName: "",
+        positionCategoryCode: "",
+        positionCategoryTitle: "",
+        // personType: "",
+        
+        currentPosition: "",
+        currentOrderLevel: "",
+        currentSalary: "",
+        currentSalaryRef: "",
+        currentSalaryExtend: "",
+
+        oriPosition: "",
+        oriOrderLevel: "",
+        oriSalary: "",
+        oriSalaryRef: "",
+        oriSalaryExtend: "",
+
+        salaryAcademic: "",
+        salaryCompensation: "",
+        salaryEmoluments: "",
+        
+        gpfStatus: "",
+        gpfDate: "",
+        gpfCollect: "",
+        gpfCollectPercent: "",
+        gpfCollectDate: "",
+        gpfCollectDateAdd: "",
+        gpfCollectStatus: "",
+        gpfCollectPercent: "",
+        
         updateDate: "",
         foreignCode: "",
         statusIdcard: "",
         id: "",
 
-        district_id: "",
-        province_id: "",
+        addDistrictID: "",
+        addProvinceID: "",
+        currentDistrictID: "",
+        currentProvinceID: "",
       },
 
+      teacherEdu: [],
+      formEdu: {
+        personId: "",
+        educationLevelCode: "",
+        educationLevelName: "",
+        degreeCode: "",
+        degreeName: "",
+        otherDegree: "",
+        majorCode: "",
+        majorName: "",
+        otherMajor: "",
+        programCode: "",
+        programName: "",
+        otherProgram: "",
+        schoolId: "",
+      },
+      defaultEdu: {
+        personId: "",
+        educationLevelCode: "",
+        educationLevelName: "",
+        degreeCode: "",
+        degreeName: "",
+        otherDegree: "",
+        majorCode: "",
+        majorName: "",
+        otherMajor: "",
+        programCode: "",
+        programName: "",
+        otherProgram: "",
+        schoolId: "",
+      },
+
+      action: "",
+      actionConfirm: "Start",
+      eduItem: {},
+
+      dialogInfo: false,
+      dialogDelete: false,
       dialogMsg: {
         title: "",
         message: "",
@@ -123,10 +308,12 @@ export default {
   },
   
   created() {
-    console.log("TEACHER");
-    this.getTeacher();  
+    this.getTeacher();
+    this.getTeacherEdu();
     this.setAcademicYear();
     this.setSemester();
+
+    this.defaultEdu.personId = this.personId;
   },
 
   methods: {    
@@ -135,7 +322,7 @@ export default {
 
     // ดึงข้อมูลครู
     async getTeacher() {
-      console.log("GET TEACHER");
+      // console.log("GET TEACHER");
       try {
         await teacherService.getById(this.personId).then(response => {
           [this.teacher] = response;
@@ -145,8 +332,10 @@ export default {
         for (let key in this.form) {
           this.form[key] = this.teacher[key];
         }
-        this.form.province_id = this.teacher.subdistrictName.province_id;
-        this.form.district_id = this.teacher.subdistrictName.district_id;
+        this.form.addProvinceID = this.teacher.addSubdistrictName.province_id;
+        this.form.addDistrictID = this.teacher.addSubdistrictName.district_id;
+        this.form.currentProvinceID = this.teacher.subdistrictName.province_id;
+        this.form.currentDistrictID = this.teacher.subdistrictName.district_id;
         
         this.form.academicYear = this.systemConfig.academicYear;
         this.form.semester = this.systemConfig.semester;
@@ -154,36 +343,90 @@ export default {
         this.form.birthdate = this.formatDate(this.form.birthdate);
         this.form.passportStartDate = this.formatDate(this.form.passportStartDate);
         this.form.passportEndDate = this.formatDate(this.form.passportEndDate);
+        // this.form.licenseStartDate = this.formatDate(this.form.licenseStartDate);
         this.form.licenseExpiredDate = this.formatDate(this.form.licenseExpiredDate);
+
+        // this.form.startDate = this.formatDate(this.form.startDate);
+        // this.form.beginDate = this.formatDate(this.form.beginDate);
+        // this.form.retireDate = this.formatDate(this.form.retireDate);
+        // this.form.proCurrentDate = this.formatDate(this.form.proCurrentDate);
+        // this.form.currentDepartmentDate = this.formatDate(this.form.currentDepartmentDate);
+        // this.form.dateAcademics = this.formatDate(this.form.dateAcademics);
+        // this.form.assistanceDateStart = this.formatDate(this.form.assistanceDateStart);
+        // this.form.assistanceDateEnd = this.formatDate(this.form.assistanceDateEnd);
+        // this.form.addDateDuty = this.formatDate(this.form.addDateDuty);
+         // this.form.gpfDate = this.formatDate(this.form.gpfDate);
+
         this.form.updateDate = moment().format("YYYYMMDD");
       } catch (error) {
         console.log(error);
       }
     },
 
+    //ดึงข้อมูลการศึกษา
+    getTeacherEdu() {
+      teacherService.getTeacherEdu(this.personId).then(response => {
+        this.teacherEdu = response;
+      });
+    },
+
     //บันทึกข้อมูล
     onSubmit() {
       console.log("Updated");
-      var teacherForm = this.form;
+      console.log(this.form);
 
-      teacherForm.birthdate = moment(teacherForm.birthdate).format("YYYYMMDD");
-      teacherForm.passportStartDate = teacherForm.passportStartDate.length > 0
-          ? moment(teacherForm.passportStartDate).format("YYYYMMDD")
-          : "00000000";
-      teacherForm.passportEndDate = teacherForm.passportEndDate.length > 0
-          ? moment(teacherForm.passportEndDate).format("YYYYMMDD")
-          : "00000000";
-      teacherForm.licenseExpiredDate = teacherForm.licenseExpiredDate.length > 0
-          ? moment(teacherForm.licenseExpiredDate).format("YYYYMMDD")
-          : "00000000";
-      teacherForm.updateDate = moment().format("YYYYMMDD");
+      // this.form.birthdate = moment(this.form.birthdate).format("YYYYMMDD");
+      // this.form.passportStartDate = this.form.passportStartDate.length > 0
+      //     ? moment(this.form.passportStartDate).format("YYYYMMDD")
+      //     : "00000000";
+      // this.form.passportEndDate = this.form.passportEndDate.length > 0
+      //     ? moment(this.form.passportEndDate).format("YYYYMMDD")
+      //     : "00000000";
+      // this.form.licenseStartDate = this.form.licenseStartDate.length > 0
+      //     ? moment(this.form.licenseStartDate).format("YYYYMMDD")
+      //     : "00000000";
+      // this.form.licenseExpiredDate = this.form.licenseExpiredDate.length > 0
+      //     ? moment(this.form.licenseExpiredDate).format("YYYYMMDD")
+      //     : "00000000";
+      // this.form.startDate = this.form.startDate.length > 0
+      //     ? moment(this.form.startDate).format("YYYYMMDD")
+      //     : "00000000";
+      // this.form.beginDate = this.form.beginDate.length > 0
+      //     ? moment(this.form.beginDate).format("YYYYMMDD")
+      //     : "00000000";
+      // this.form.retireDate = this.form.retireDate.length > 0
+      //     ? moment(this.form.retireDate).format("YYYYMMDD")
+      //     : "00000000";
+      // this.form.proCurrentDate = this.form.proCurrentDate.length > 0
+      //     ? moment(this.form.proCurrentDate).format("YYYYMMDD")
+      //     : "00000000";
+      // this.form.currentDepartmentDate = this.form.currentDepartmentDate.length > 0
+      //     ? moment(this.form.currentDepartmentDate).format("YYYYMMDD")
+      //     : "00000000";
+      // this.form.dateAcademics = this.form.dateAcademics.length > 0
+      //     ? moment(this.form.dateAcademics).format("YYYYMMDD")
+      //     : "00000000";
+      // this.form.assistanceDateStart = this.form.assistanceDateStart.length > 0
+      //     ? moment(this.form.assistanceDateStart).format("YYYYMMDD")
+      //     : "00000000";
+      // this.form.assistanceDateEnd = this.form.assistanceDateEnd.length > 0
+      //     ? moment(this.form.assistanceDateEnd).format("YYYYMMDD")
+      //     : "00000000";
+      // this.form.addDateDuty = this.form.addDateDuty.length > 0
+      //     ? moment(this.form.addDateDuty).format("YYYYMMDD")
+      //     : "00000000";
+      // this.form.gpfDate = this.form.gpfDate.length > 0
+      //     ? moment(this.form.gpfDate).format("YYYYMMDD")
+      //     : "00000000";
+      
+      this.form.updateDate = moment().format("YYYYMMDD");
       let d = new Date().getTime();
       this.actionConfirm = this.action + d;
       this.action = "update";
 
       // console.log(this.form)
 
-      teacherService.update(teacherForm).then(
+      teacherService.update(this.form).then(
         (response) => {
           this.dialogMsg = {
             title: "เยี่ยมมาก",
@@ -213,6 +456,9 @@ export default {
         this.mm = ymd.substr(4, 2);
         this.dd = ymd.substr(6, 2);
         return this.yyyy + "-" + this.mm + "-" + this.dd;
+      }
+      else if (ymd.length == 10){
+        return ymd;
       } else {
         return "";
       }
@@ -273,25 +519,83 @@ export default {
         })        
       }      
     },
+
+    // addItem() {
+    //   this.formTitle = `บันทึกข้อมูล`;
+    //   this.formEdu = Object.assign({}, this.defaultEdu);
+    //   this.state = "";
+    //   this.action = "add";
+    // },
+
+    insertEdu() {
+      console.log(`Insert EDU`)
+      this.formTitle = `บันทึกข้อมูลการศึกษา`;
+      this.formEdu = Object.assign({}, this.defaultEdu);
+      this.action = "add";
+      this.dialogInfo = true;
+    },
+
+    updateEdu(item) {
+      console.log(`Emit Update EDU ${item._id}`)
+      this.formTitle = `แก้ไขข้อมูลการศึกษา`;
+      for (let key in item) {
+        this.formEdu[key] = item[key];
+      }
+      this.action = "update";
+      this.dialogInfo = true;
+    },
+
+    deleteEdu(item) {
+      console.log(`Delete EDU ${item._id}`)
+      this.formTitle = `ยืนยันการลบข้อมูล: ${item.otherMajor} หรือไม่?`;
+      this.eduItem = item;
+      this.dialogDelete = true;
+      this.deleteConfirm = "";
+      this.action = "delete";
+    },
+
+    deleteItemConfirm() {
+      console.log("Delete : " + this.eduItem._id);
+      teacherService.deleteTeacherEdu(this.eduItem._id);
+
+      let d = new Date().getTime();
+      this.actionConfirm = this.action + d;
+      this.action = "";
+
+      this.getTeacherEdu();
+      this.closeDelete();
+    },
+
+    onInsert() {
+      console.log(`Emit onInsert`)
+      this.getTeacherEdu();
+      this.closeInfo();
+    },
+
+    onUpdate() {
+      console.log(`Emit OnUpdate`)
+      this.getTeacherEdu();
+      this.closeInfo();
+    },
+
+    onOk(value) {
+      this.dialogMsg = {
+        title: "",
+        message: "",
+        type: "primary",
+        show: false
+      };
+    },
+    closeInfo() {
+      this.dialogInfo = false;
+    },
+    closeDelete() {
+      this.dialogDelete = false;
+    },
   }
 };
 </script>
 
 <style scoped>
-.card-title {
-  margin-bottom: 0rem;
-}
-.text-header {
-  margin-top: 40px;
-}
-span .page-link {
-  line-height: normal;
-}
-.btn-control button {
-  margin-right: 5px;
-}
-.btn-prev {
-  margin-bottom: -6px;
-  margin-top: -4px;
-}
+
 </style>

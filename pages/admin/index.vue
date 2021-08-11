@@ -5,8 +5,8 @@
       <v-flex lg3 sm6 xs12>
         <mini-statistic
           icon="fa fa-bar-chart"
-          :title="cntTeacher.toLocaleString()"
-          sub-title="ครู"
+          :title="cnt10.toLocaleString()"
+          sub-title="ข้าราชการครูและบุคลากรทางการศึกษา"
           color="indigo"
         >
         </mini-statistic>
@@ -14,8 +14,8 @@
       <v-flex lg3 sm6 xs12>
         <mini-statistic
           icon="fa fa-bar-chart"
-          :title="cntTeacherAll.toLocaleString()"
-          sub-title="ข้าราชการครู"
+          :title="cnt11.toLocaleString()"
+          sub-title="ข้าราชการพลเรือนสามัญ"
           color="red"
         >
         </mini-statistic>
@@ -23,8 +23,8 @@
       <v-flex lg3 sm6 xs12>
         <mini-statistic
           icon="fa fa-bar-chart"
-          :title="cntSchool.toLocaleString()"
-          sub-title="โรงเรียน"
+          :title="cnt23.toLocaleString()"
+          sub-title="พนักงานราชการ"
           color="light-blue"
         >
         </mini-statistic>
@@ -32,9 +32,49 @@
       <v-flex lg3 sm6 xs12>
         <mini-statistic
           icon="fa fa-bar-chart"
-          :title="cntArea.toLocaleString()"
-          sub-title="สพท."
+          :title="cnt15.toLocaleString()"
+          sub-title="ลูกจ้างประจำ"
           color="purple"
+        >
+        </mini-statistic>
+      </v-flex>
+
+      <v-flex lg3 sm6 xs12>
+        <mini-statistic
+          icon="fa fa-bar-chart"
+          :title="cnt17.toLocaleString()"
+          sub-title="ลูกจ้างชั่วคราว"
+          color="pink"
+        >
+        </mini-statistic>
+      </v-flex>
+
+      <v-flex lg3 sm6 xs12>
+        <mini-statistic
+          icon="fa fa-bar-chart"
+          :title="cnt38.toLocaleString()"
+          sub-title="บุคลากรทางการศึกษา 38 ค.(2)"
+          color="teal"
+        >
+        </mini-statistic>
+      </v-flex>
+
+       <v-flex lg3 sm6 xs12>
+        <mini-statistic
+          icon="fa fa-bar-chart"
+          :title="cntArea.toLocaleString()"
+          sub-title="สำนักงานเขตพื้นที่การศึกษา"
+          color="cyan"
+        >
+        </mini-statistic>
+      </v-flex>
+
+       <v-flex lg3 sm6 xs12>
+        <mini-statistic
+          icon="fa fa-bar-chart"
+          :title="cntSchool.toLocaleString()"
+          sub-title="จำนวนโรงเรียน"
+          color="green"
         >
         </mini-statistic>
       </v-flex>
@@ -77,8 +117,13 @@ export default {
       title: "ผู้ดูแลระบบ",
       cntArea: 0,
       cntSchool: 0,
-      cntTeacher: 0,
-      cntTeacherAll: 0
+      cnt10: 0,
+      cnt11: 0,
+      cnt23: 0,
+      cnt15: 0,
+      cnt17: 0,
+      cnt38: 0,
+      cntTotal: 0,
     };
   },
 
@@ -91,13 +136,22 @@ export default {
   created() {
     this.countArea();
     this.countSchool();
-    this.countTeacher();
-    this.countTeacherAll();
+    this.count10();
+    this.count11();
+    this.count23();
+    this.count15();
+    this.count17();
+    this.count38();
+  },
+
+  mounted() {
+    this.cntTotal = this.cnt10 + this.cnt11 + this.cnt23 + this.cnt15 + this.cnt17 + this.cnt38;
   },
 
   methods: {
     async countArea() {
-      let { count } = await areaService.countArea();
+      let orgType = "Area"
+      let { count } = await areaService.countArea(orgType);
       this.cntArea = count;
     },
 
@@ -106,14 +160,52 @@ export default {
       this.cntSchool = count;
     },
 
-    async countTeacher() {
-      let { count } = await teacherService.countTeacher("", 10);
-      this.cntTeacher = count;
+    // async countTeacherAll() {
+    //   let { count } = await teacherService.countTeacher();
+    //   this.cntTeacherAll = count;
+    // },
+    async count10() {
+      let { count } = await teacherService.countTeacher(
+        "",
+        10
+      );
+      this.cnt10 = count;
     },
-    async countTeacherAll() {
-      let { count } = await teacherService.countTeacher();
-      this.cntTeacherAll = count;
-    }
+    async count11() {
+      let { count } = await teacherService.countTeacher(
+        "",
+        11
+      );
+      this.cnt11 = count;
+    },
+    async count23() {
+      let { count } = await teacherService.countTeacher(
+        "",
+        23
+      );
+      this.cnt23 = count;
+    },
+    async count15() {
+      let { count } = await teacherService.countTeacher(
+        "",
+        15
+      );
+      this.cnt15 = count;
+    },
+    async count17() {
+      let { count } = await teacherService.countTeacher(
+        "",
+        17
+      );
+      this.cnt17 = count;
+    },
+    async count38() {
+      let { count } = await teacherService.countTeacher(
+        "",
+        38
+      );
+      this.cnt38 = count;
+    },
   }
 };
 </script>

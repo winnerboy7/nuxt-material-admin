@@ -107,10 +107,10 @@ function getByArea(areaCode) {
   });
 }
 
-function insert(teacher) {
+function insert(personel) {
   return new Promise((resolve, reject) => {
     axios
-      .post(`/api/personels`, teacher, {
+      .post(`/api/personels`, personel, {
         headers: authHeader()
       })
       .then(response => {
@@ -123,10 +123,10 @@ function insert(teacher) {
   });
 }
 
-function update(teacher) {
+function update(personel) {
   return new Promise((resolve, reject) => {
     axios
-      .put(`/api/personels/${teacher.personId}`, teacher, {
+      .put(`/api/personels/${personel.personId}`, personel, {
         headers: authHeader()
       })
       .then(response => {

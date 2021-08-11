@@ -326,7 +326,7 @@ export default {
       form: {
         areaId: "",
         areaName: "",
-        schoolId: "",
+        areaCode: "",
         schoolName: "",
 
         fullname: "",
@@ -350,7 +350,7 @@ export default {
 
         academicYear: "",
         semester: "",
-        schoolId: "",
+        areaCode: "",
         passportNumber: "",
         passportStartDate: "",
         passportEndDate: "",

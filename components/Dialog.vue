@@ -45,6 +45,7 @@ export default {
 
   methods: {
     onOk(event) {
+      console.log('OK')
       this.$emit("onOk", this.show);
     },
   },

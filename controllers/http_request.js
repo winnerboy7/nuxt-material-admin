@@ -43,7 +43,6 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(handleError(error))
   }
 )
-
 class HttpRequest {
   constructor() {
     this.axios = axios

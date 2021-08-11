@@ -10,12 +10,25 @@ export const standardcodeService = {
   getProvince,
   getPersonTypeCode,
   getPositionCode,
-  getTeachAcademicLevelCode,
+  getPositionById,
+  getPositionStatus,
+  getAcademicLevelCode,
+  getEducationLevel,
+  getDegree,
+  getMajor,
+  getMajorProgram,
   getAcademicStandingCode,
+  getOrderLevel,
+  getOrderLevelById,
+  getTeacherCertificateCode,
   getTeachSubjectCode,
+  getGroupSubject,
+  getGroupSubjectById,
   getSchoolType,
   getSchoolSpecial,
   getSchoolPosition,
+  getAddPosition,
+  getDepartment,
 };
 function getPrefix() {
   return new Promise((resolve, reject) => {
@@ -149,10 +162,100 @@ function getPositionCode() {
   });
 }
 
-function getTeachAcademicLevelCode() {
+function getPositionById(id) {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`/api/standardcode/position/${id}`, {
+        headers : authHeader(),
+      })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(error => {
+        reject(handleError(error));
+      });
+  });
+}
+
+function getPositionStatus() {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`/api/standardcode/positionStatus/`, {
+        headers : authHeader(),
+      })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(error => {
+        reject(handleError(error));
+      });
+  });
+}
+
+function getAcademicLevelCode() {
   return new Promise((resolve, reject) => {
     axios
       .get(`/api/standardcode/academicLevel/`, {
+        headers : authHeader(),
+      })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(error => {
+        reject(handleError(error));
+      });
+  });
+}
+
+function getEducationLevel() {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`/api/standardcode/educationLevel/`, {
+        headers : authHeader(),
+      })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(error => {
+        reject(handleError(error));
+      });
+  });
+}
+
+function getDegree() {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`/api/standardcode/degree/`, {
+        headers : authHeader(),
+      })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(error => {
+        reject(handleError(error));
+      });
+  });
+}
+
+function getMajor() {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`/api/standardcode/major/`, {
+        headers : authHeader(),
+      })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(error => {
+        reject(handleError(error));
+      });
+  });
+}
+
+function getMajorProgram() {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`/api/standardcode/majorProgram/`, {
         headers : authHeader(),
       })
       .then(response => {
@@ -179,11 +282,86 @@ function getAcademicStandingCode() {
   });
 }
 
+function getOrderLevel() {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`/api/standardcode/orderLevel/`, {
+        headers : authHeader(),
+      })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(error => {
+        reject(handleError(error));
+      });
+  });
+}
+
+function getOrderLevelById(id) {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`/api/standardcode/orderLevel/${id}`, {
+        headers: authHeader()
+      })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(error => {
+        reject(handleError(error));
+      });
+  });
+}
+
+function getTeacherCertificateCode() {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`/api/standardcode/teacherCertificate/`, {
+        headers : authHeader(),
+      })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(error => {
+        reject(handleError(error));
+      });
+  });
+}
+
 function getTeachSubjectCode() {
   return new Promise((resolve, reject) => {
     axios
       .get(`/api/standardcode/teachSubject/`, {
         headers : authHeader(),
+      })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(error => {
+        reject(handleError(error));
+      });
+  });
+}
+
+function getGroupSubject() {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`/api/standardcode/groupSubject/`, {
+        headers : authHeader(),
+      })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(error => {
+        reject(handleError(error));
+      });
+  });
+}
+
+function getGroupSubjectById(id) {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`/api/standardcode/groupSubject/${id}`, {
+        headers: authHeader()
       })
       .then(response => {
         resolve(response.data);
@@ -238,6 +416,37 @@ function getSchoolPosition() {
       });
   });
 }
+
+function getAddPosition() {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`/api/standardcode/addPosition/`, {
+        headers : authHeader(),
+      })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(error => {
+        reject(handleError(error));
+      });
+  });
+}
+
+function getDepartment() {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`/api/standardcode/department/`, {
+        headers : authHeader(),
+      })
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(error => {
+        reject(handleError(error));
+      });
+  });
+}
+
 
 function handleError(error) {
   // console.log({...error});

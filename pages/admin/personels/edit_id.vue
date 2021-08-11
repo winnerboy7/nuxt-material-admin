@@ -716,7 +716,7 @@ export default {
 
         academicYear: "",
         semester: "",
-        schoolId: "",
+        areaCode: "",
         passportNumber: "",
         passportStartDate: "",
         passportEndDate: "",

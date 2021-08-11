@@ -63,6 +63,7 @@
   import npmPackage from "@/package.json"
 
   export default {
+    name : 'Area',
     components: {
       AppDrawer,
       AppToolbar,

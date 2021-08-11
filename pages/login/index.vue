@@ -40,7 +40,12 @@
                     label="Password"
                     name="password"
                     prepend-icon="mdi-lock"
-                    type="password"
+                    
+                    :value="password"
+                    :append-icon="value ? 'mdi-eye' : 'mdi-eye-off'"
+                    @click:append="() => (value = !value)"
+                    :type="value ? 'password' : 'text'"
+                   
                     required
                   ></v-text-field>
                 </v-form>
@@ -56,7 +61,7 @@
                 >
                   เข้าสู่ระบบ
                 </v-btn>
-
+                
                 <v-btn color="warning" @click="resetValidation">
                   รีเซต
                 </v-btn>
@@ -132,6 +137,7 @@ export default {
     ],
     dialog: false,
     snackbarMessage: '',
+    value:'',
   }),
 
   computed: {
@@ -155,7 +161,7 @@ export default {
       if (!val) { return }
       const _this = this
 
-      let url = '/'
+      let url = '/login'
       if (this.roleAuth === Role.Admin) {
         url = '/admin'
       } else if (this.roleAuth === Role.Area) {
@@ -192,7 +198,11 @@ export default {
     handleSubmit() {
       const { username, password } = this
       if (username && password) {
+        let _this = this
         this.login({ username, password })
+        .then(function () {
+          
+        });       
       }
     },
 
